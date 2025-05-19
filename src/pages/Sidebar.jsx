@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   Users,
   LogOut,
+  IdCard
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "../assets/main_logo.png";
@@ -127,7 +128,7 @@ const Sidebar = () => {
             onClick={closeSidebar}
           />
           <MenuItem
-            icon={<School size={20} />}
+            icon={<IdCard size={20} />}
             text="Admit Card"
             href="/genrate-admit-card"
             active={location.pathname === "/genrate-admit-card"}

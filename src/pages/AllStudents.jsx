@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react"
 import axios from "axios";
 import Select from "react-select";
 import { BASE_URL } from "../Api";
 import html2pdf from "html2pdf.js";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-
-
-
 import logo from "../assets/main_logo.png";
 
 // List of fields that should be treated as booleans ("0" or "1")
@@ -54,64 +51,67 @@ const AllStudents = () => {
   const [selectedExamLevel, setSelectedExamLevel] = useState('');
   const [selectedExam, setSelectedExam] = useState('');
   const [selectedSchoolCode, setSelectedSchoolCode] = useState('');
-  const [selectedClass, setSelectedClass] = useState('');
-  const [selectedSection, setSelectedSection] = useState('');
+  // const [selectedClass, setSelectedClass] = useState('');
+  // const [selectedSection, setSelectedSection] = useState('');
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [selectedSections, setSelectedSections] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
   const [school, setSchool] = useState({});
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false); // Loader state for Fetch button
+  const [isFetched, setIsFetched] = useState(false); // Track if data has been fetched
 
   const attendanceRef = useRef(null);
 
-
   const exams = [
-    { name: "IENGOL1", level: "L1" },
-    { name: "IENGOL1Book", level: "L1" },
-    { name: "IAOL1", level: "L1" },
-    { name: "IAOL1Book", level: "L1" },
-    { name: "ITSTL1", level: "L1" },
-    { name: "ITSTL1Book", level: "L1" },
-    { name: "IMOL1", level: "L1" },
-    { name: "IMOL1Book", level: "L1" },
-    { name: "IGKOL1", level: "L1" },
-    { name: "IGKOL1Book", level: "L1" },
-    { name: "IAOL2", level: "L2" },
-    { name: "ITSTL2", level: "L2" },
-    { name: "IMOL2", level: "L2" },
-    { name: "IENGOL2", level: "L2" },
+    { name: "IQEOL1", level: "L1" },
+    { name: "IQEOL2", level: "L2" },
+    { name: "IQROL1", level: "L1" },
+    { name: "IQROL2", level: "L2" },
+    { name: "IQSOL1", level: "L1" },
+    { name: "IQSOL2", level: "L2" },
+    { name: "IQMOL1", level: "L1" },
+    { name: "IQMOL2", level: "L2" },
+    { name: "IQGKOL1", level: "L1" },
+    { name: "IQGKOL2", level: "L2" },
   ];
 
   // Fetch the student data based on filters
   const handleFetchStudents = async () => {
-    // Check if all filters are selected
-    if (!selectedExamLevel || !selectedExam || !selectedSchoolCode || !selectedClass || !selectedSection) {
-      alert("Please select all filters!");
+    if (!selectedExamLevel || !selectedExam || !selectedSchoolCode) {
+      alert("Please select exam level, exam, and school code!");
       return;
     }
 
-    // Create the request body with the selected filters
     const filters = {
       examLevel: selectedExamLevel,
-      exam: selectedExam,
-      schoolCode: selectedSchoolCode,
-      class: selectedClass,
-      section: selectedSection,
+      exam: selectedExam || undefined,
+      schoolCode: selectedSchoolCode || undefined,
+      classes: selectedClasses.length > 0 ? selectedClasses.map(opt => opt.value) : undefined,
+      sections: selectedSections.length > 0 ? selectedSections.map(opt => opt.value) : undefined,
     };
 
     try {
-      // Send the filters to the backend to fetch the student data
+      setIsFetching(true);
       const res = await axios.post(`${BASE_URL}/allStudents`, filters);
-      console.log(res.data)
       if (res.data.student) {
         setStudentsData(res.data.student);
-        setSchool(res.data.school)
+        setSchool(res.data.school || {});
+        setIsFetched(true);
       } else {
+        setStudentsData([]);
+        setIsFetched(true);
         alert("Error fetching student data.");
       }
     } catch (error) {
       console.error("Error fetching student data:", error);
+      setStudentsData([]);
+      setIsFetched(true);
       alert("Error fetching student data.");
+    } finally {
+      setIsFetching(false);
     }
   };
-
 
   const handleDownloadPDF = async () => {
     const element = attendanceRef.current;
@@ -122,11 +122,12 @@ const AllStudents = () => {
     }
 
     try {
+      setIsDownloading(true);
       // Store original styles
       const originalStyles = new Map();
       const saveStyles = (node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
-          const style = node.style;
+          const style = window.getComputedStyle(node);
           originalStyles.set(node, {
             color: style.color,
             backgroundColor: style.backgroundColor,
@@ -138,75 +139,115 @@ const AllStudents = () => {
             fontWeight: style.fontWeight,
             textAlign: style.textAlign,
             width: style.width,
-            whiteSpace: style.whiteSpace,
-            wordBreak: style.wordBreak,
           });
-          // Set PDF-safe styles to match preview
+
+          // Apply PDF-safe styles
           node.style.color = "#000000";
-          node.style.backgroundColor = "#ffffff";
+          node.style.backgroundColor = "transparent";
           node.style.borderColor = "#000000";
-          node.style.fontSize = "12pt";
-          node.style.lineHeight = "1.5";
-          node.style.padding = node.tagName === "P" ? "4px 0" : style.padding;
-          node.style.margin = node.tagName === "P" ? "4px 0" : style.margin;
-          if (node.tagName === "H1") {
-            node.style.fontSize = "16pt";
-            node.style.fontWeight = "bold";
+          node.style.fontFamily = "Arial, sans-serif";
+          node.style.fontSize = "12px"; // Slightly reduced for better fit
+          node.style.lineHeight = "1.5"; // Adjusted for readability
+
+          // Center content
+          if (node.tagName === "H1" || node.tagName === "H2") {
+            node.style.textAlign = "center";
+            node.style.textTransform = "uppercase";
+            node.style.marginBottom = "6px"; // Increased spacing
+            node.style.fontSize = "14px"; // Slightly larger for headers
+          }
+
+          if (node.tagName === "P") {
+            node.style.textAlign = "left";
+            node.style.textTransform = "uppercase";
+            node.style.marginBottom = "6px"; // Increased spacing
+          }
+
+          if (node.id == "exam-name") {
             node.style.textAlign = "center";
           }
-          if (node.tagName === "H2") {
-            node.style.fontSize = "14pt";
-            node.style.fontWeight = "bold";
-            node.style.textAlign = "center";
+
+          // Image (logo)
+          if (node.tagName === "IMG") {
+            node.style.display = "block";
+            node.style.marginLeft = "auto";
+            node.style.marginRight = "auto";
+            node.style.height = "45px"; // Slightly larger logo
+            node.style.marginBottom = "10px";
           }
+
+          // Center grids and tables
+          if (node.classList.contains("grid") || node.tagName === "TABLE") {
+            node.style.width = "85%"; // Slightly wider for better content fit
+            node.style.marginLeft = "auto";
+            node.style.marginRight = "auto";
+            node.style.fontSize = "10px";
+          }
+
           if (node.tagName === "TABLE") {
             node.style.borderCollapse = "collapse";
-            node.style.width = "100%";
+          }
+
+          if (node.tagName === "TH") {
+            node.style.border = "0.5px solidrgb(184, 178, 178)";
+            node.style.textAlign = "center";
+            node.style.padding = "3px 5px"; // Increased padding for clarity
+          }
+
+          if (node.tagName === "TD") {
+            node.style.textAlign = "center";
+            node.style.padding = "3px 5px";
             node.style.boxSizing = "border-box";
           }
-          if (node.tagName === "TH" || node.tagName === "TD") {
-            node.style.padding = "6px";
-            node.style.border = "1px solid #000000";
-            node.style.textAlign = node.tagName === "TH" ? "center" : "left";
-            node.style.whiteSpace = "normal";
-            node.style.wordBreak = "break-word";
-            // Set explicit column widths
-            if (node.cellIndex === 0) node.style.width = "7%"; // S.No
-            if (node.cellIndex === 1) node.style.width = "14%"; // Roll No
-            if (node.cellIndex === 2) node.style.width = "19%"; // Name
-            if (node.cellIndex === 3) node.style.width = "17%"; // Father
-            if (node.cellIndex === 4) node.style.width = "17%"; // Mother
-            if (node.cellIndex === 5) node.style.width = "9%"; // Class
-            if (node.cellIndex === 6) node.style.width = "7%"; // Sec
-            if (node.cellIndex === 7) node.style.width = "10%"; // Attendance
-          }
-          if (node.classList.contains("bg-gray-100")) {
+
+          if (node.tagName === "TH") {
             node.style.backgroundColor = "#e5e7eb";
+            node.style.fontWeight = "600"; // Bolder for emphasis
           }
+
+          // Note section
+          if (node.classList.contains("border-t")) {
+            node.style.borderTop = "1px solid #000000";
+            node.style.paddingTop = "10px";
+            node.style.marginTop = "10px";
+            node.style.width = "85%";
+            node.style.marginLeft = "auto";
+            node.style.marginRight = "auto";
+            node.style.fontSize = "9px"; // Slightly smaller for note
+          }
+
+          // Root div
+          if (node.id === "download") {
+            node.style.padding = "20px"; // Increased padding
+            node.style.border = "1px solid #000000";
+            node.style.backgroundColor = "#ffffff";
+            node.style.width = "100%";
+          }
+
           node.childNodes.forEach(saveStyles);
         }
       };
 
-      // Apply safe styles
+      // Apply styles
       saveStyles(element);
 
       // Ensure element is fully visible for capture
       const originalPosition = element.style.position;
       const originalTop = element.style.top;
       const originalLeft = element.style.left;
+      const originalWidth = element.style.width;
       element.style.position = "static";
       element.style.top = "0";
       element.style.left = "0";
+      element.style.width = "100%";
 
       // Capture with html2canvas
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
         logging: true,
-        width: element.scrollWidth,
-        height: element.scrollHeight,
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
+        windowWidth: element.scrollWidth + 50, // Increased padding
+        windowHeight: element.scrollHeight + 50, // Increased padding
       });
 
       // Restore original styles and positioning
@@ -221,12 +262,11 @@ const AllStudents = () => {
         node.style.fontWeight = styles.fontWeight;
         node.style.textAlign = styles.textAlign;
         node.style.width = styles.width;
-        node.style.whiteSpace = styles.whiteSpace;
-        node.style.wordBreak = styles.wordBreak;
       });
       element.style.position = originalPosition;
       element.style.top = originalTop;
       element.style.left = originalLeft;
+      element.style.width = originalWidth;
 
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
@@ -245,40 +285,64 @@ const AllStudents = () => {
       // Calculate available content height per page
       const maxContentHeight = pageHeight - 2 * margin;
 
+      // Simplified pagination logic
       if (imgHeight <= maxContentHeight) {
-        // Single page
-        pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+        // Single page for all content
+        pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight, undefined, "SLOW");
       } else {
         // Paginate content
-        let currentHeight = 0;
-        const pixelsPerMm = canvas.height / imgHeight; // Pixels per mm in the scaled image
+        let position = 0;
+        while (position < imgHeight) {
+          const tempCanvas = document.createElement("canvas");
+          const tempCtx = tempCanvas.getContext("2d");
+          tempCanvas.width = canvas.width;
+          tempCanvas.height = Math.min(
+            canvas.height - (position * canvas.width) / imgWidth,
+            (maxContentHeight * canvas.width) / imgWidth
+          );
 
-        while (currentHeight < imgHeight) {
-          const yOffset = currentHeight * pixelsPerMm; // Convert mm to pixels for cropping
+          tempCtx.drawImage(
+            canvas,
+            0,
+            (position * canvas.width) / imgWidth,
+            canvas.width,
+            tempCanvas.height,
+            0,
+            0,
+            canvas.width,
+            tempCanvas.height
+          );
+
           pdf.addImage(
-            imgData,
+            tempCanvas.toDataURL("image/png"),
             "PNG",
             margin,
             margin,
             imgWidth,
-            Math.min(maxContentHeight, imgHeight - currentHeight),
+            Math.min(maxContentHeight, imgHeight - position),
             undefined,
-            "SLOW",
-            0,
-            -yOffset
+            "SLOW"
           );
-          currentHeight += maxContentHeight;
-          if (currentHeight < imgHeight) {
+
+          position += maxContentHeight;
+          if (position < imgHeight) {
             pdf.addPage();
           }
         }
       }
 
+      // Generate filename with multiple classes and sections
+      const classString = selectedClasses.map(opt => opt.value).join('-');
+      const sectionString = selectedSections.map(opt => opt.value).join('-');
+      const filename = `Attendance_${classString}_${sectionString}${selectedExam ? `_${selectedExam}` : ''}${selectedSchoolCode ? `_${selectedSchoolCode}` : ''}.pdf`;
+
       // Save PDF
-      pdf.save(`Attendance_${selectedClass}_${selectedSection}.pdf`);
+      pdf.save(filename);
     } catch (err) {
       console.error("PDF generation failed:", err);
       alert("Failed to generate PDF. Check console for details.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -936,7 +1000,6 @@ const AllStudents = () => {
 
 
 
-       
         {isAttendanceModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div
@@ -944,12 +1007,10 @@ const AllStudents = () => {
               onClick={() => setIsAttendanceModalOpen(false)}
             />
             <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-
               <h2 className="text-xl font-bold mb-4">Get Attendance</h2>
 
               {/* Filters Form */}
               <div className="grid grid-cols-2 gap-4 mb-4">
-                {/* Exam Level */}
                 <div>
                   <label className="block text-sm font-medium">Exam Level</label>
                   <select
@@ -962,8 +1023,6 @@ const AllStudents = () => {
                     <option value="L2">Advance</option>
                   </select>
                 </div>
-
-                {/* Select Exam */}
                 <div>
                   <label className="block text-sm font-medium">Select Exam</label>
                   <select
@@ -981,8 +1040,6 @@ const AllStudents = () => {
                       ))}
                   </select>
                 </div>
-
-                {/* School Code */}
                 <div>
                   <label className="block text-sm font-medium">School Code</label>
                   <input
@@ -993,66 +1050,88 @@ const AllStudents = () => {
                     placeholder="Enter School Code"
                   />
                 </div>
-
-                {/* Class */}
                 <div>
-                  <label className="block text-sm font-medium">Select Class</label>
-                  <select
-                    className="mt-1 w-full border rounded px-3 py-2"
-                    value={selectedClass}
-                    onChange={(e) => setSelectedClass(e.target.value)}
-                  >
-                    <option value="">Select Class</option>
-                    {classOptions.map((cls) => (
-                      <option key={cls.value} value={cls.value}>
-                        {cls.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium">Select Classes</label>
+                  <Select
+                    isMulti
+                    options={classOptions}
+                    value={selectedClasses}
+                    onChange={setSelectedClasses}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    placeholder="Select classes..."
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        padding: "0.1rem",
+                        fontSize: "0.875rem",
+                        borderColor: "black"
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        zIndex: 50,
+                      }),
+                    }}
+                  />
                 </div>
-
-                {/* Section */}
                 <div>
-                  <label className="block text-sm font-medium">Select Section</label>
-                  <select
-                    className="mt-1 w-full border rounded px-3 py-2"
-                    value={selectedSection}
-                    onChange={(e) => setSelectedSection(e.target.value)}
-                  >
-                    <option value="">Select Section</option>
-                    {sectionOptions.map((section) => (
-                      <option key={section.value} value={section.value}>
-                        {section.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium">Select Sections</label>
+                  <Select
+                    isMulti
+                    options={sectionOptions}
+                    value={selectedSections}
+                    onChange={setSelectedSections}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    placeholder="Select sections..."
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        padding: "0.1rem",
+                        fontSize: "0.875rem",
+                        borderColor: "black"
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        zIndex: 50,
+                      }),
+                    }}
+                  />
                 </div>
               </div>
 
               {/* Fetch Data Button */}
               <div className="flex justify-end mb-4">
                 <button
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                  className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleFetchStudents}
+                  disabled={isFetching}
                 >
-                  Fetch Students
+                  {isFetching ? (
+                    <>
+                      <span className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                      Fetching...
+                    </>
+                  ) : (
+                    "Fetch Students"
+                  )}
                 </button>
               </div>
 
               {/* Preview Student Data */}
+
               <div
                 id="download"
                 style={{ color: "#000000", backgroundColor: "#ffffff" }}
                 className="bg-white p-7 rounded-lg shadow-md border text-sm w-full"
                 ref={attendanceRef}
               >
-                {/* Header */}
                 <div className="text-center mb-6">
                   <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
                   <h1 className="text-lg font-semibold uppercase">
                     International Aptitude Olympiad
                   </h1>
-                  <p className="font-medium uppercase">
+                  <p id="exam-name" className="font-medium uppercase">
                     {selectedExamLevel === "L1"
                       ? "Basic Exam"
                       : selectedExamLevel === "L2"
@@ -1063,10 +1142,8 @@ const AllStudents = () => {
                     Attendance List
                   </h2>
                 </div>
-
-                {/* School Info */}
                 <div className="grid grid-cols-2 text-xs mb-6 gap-y-2">
-                  <div>
+                  <div id="top-left">
                     <p>
                       <strong>School Name:</strong> {school.schoolName || "N/A"}
                     </p>
@@ -1081,26 +1158,23 @@ const AllStudents = () => {
                     </p>
                   </div>
                   <div>
-                    <p>
+                    {/* <p>
                       <strong>Class:</strong> {selectedClass || "N/A"}
                     </p>
                     <p>
                       <strong>Section:</strong> {selectedSection || "N/A"}
-                    </p>
+                    </p> */}
                     <p>
                       <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
                     </p>
                     <p>
-                      <strong>Class Teacher:</strong> {school.incharge || "N/A"}
+                      {/* <strong>Class Teacher:</strong> {school.incharge || "N/A"} */}
                     </p>
                     <p>
-                      <strong>Print Date:</strong>{" "}
-                      {new Date().toLocaleDateString()}
+                      <strong>Print Date:</strong> {new Date().toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-
-                {/* Table */}
                 <table className="table-auto w-full border text-center text-xs mb-4">
                   <thead className="bg-gray-100">
                     <tr>
@@ -1120,15 +1194,9 @@ const AllStudents = () => {
                         <tr key={student._id || index}>
                           <td className="border px-2 py-1">{index + 1}</td>
                           <td className="border px-2 py-1">{student.rollNo}</td>
-                          <td className="border px-2 py-1">
-                            {student.studentName}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {student.fatherName || ""}
-                          </td>
-                          <td className="border px-2 py-1">
-                            {student.motherName || ""}
-                          </td>
+                          <td className="border px-2 py-1">{student.studentName}</td>
+                          <td className="border px-2 py-1">{student.fatherName || ""}</td>
+                          <td className="border px-2 py-1">{student.motherName || ""}</td>
                           <td className="border px-2 py-1">{student.class}</td>
                           <td className="border px-2 py-1">{student.section}</td>
                           <td className="border px-2 py-1">
@@ -1145,8 +1213,6 @@ const AllStudents = () => {
                     )}
                   </tbody>
                 </table>
-
-                {/* Footer Summary */}
                 <div className="grid grid-cols-2 text-xs mb-2">
                   <div>
                     <p>
@@ -1160,8 +1226,7 @@ const AllStudents = () => {
                   </div>
                   <div>
                     <p>
-                      <strong>Information Filled By:</strong>{" "}
-                      ______________________
+                      <strong>Information Filled By:</strong> ______________________
                     </p>
                     <p>
                       <strong>Mobile No:</strong> ____________________
@@ -1171,8 +1236,6 @@ const AllStudents = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* Note */}
                 <div className="text-xs border-t pt-2 mt-2">
                   <strong>IMPORTANT NOTE:</strong> Please note that we shall print
                   certificates as per the above details. So this is very important
@@ -1183,21 +1246,33 @@ const AllStudents = () => {
                 <div className="mt-2"></div>
               </div>
 
+
               {/* Actions */}
               <div className="flex justify-between mt-2">
                 <button
                   onClick={() => setIsAttendanceModalOpen(false)}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md"
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isDownloading || isFetching}
                 >
                   Close
                 </button>
 
-                <button
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
-                  onClick={handleDownloadPDF} // Implement this if needed
-                >
-                  Download PDF
-                </button>
+                {isFetched && (
+                  <button
+                    className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading ? (
+                      <>
+                        <span className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                        Downloading...
+                      </>
+                    ) : (
+                      "Download PDF"
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>
