@@ -26,6 +26,20 @@ const booleanFields = [
   "Duplicates",
 ];
 
+// Map exam codes to full names
+const examFullNames = {
+  IQEOL1: { fullName: "IQNEXUS ENGLISH OLYMPIAD", code: "IQEO", level: "Level 1" },
+  IQEOL2: { fullName: "IQNEXUS ENGLISH OLYMPIAD", code: "IQEO", level: "Level 2" },
+  IQROL1: { fullName: "IQNEXUS REASONING OLYMPIAD", code: "IQRO", level: "Level 1" },
+  IQROL2: { fullName: "IQNEXUS REASONING OLYMPIAD", code: "IQRO", level: "Level 2" },
+  IQSOL1: { fullName: "IQNEXUS SCIENCE OLYMPIAD", code: "IQSO", level: "Level 1" },
+  IQSOL2: { fullName: "IQNEXUS SCIENCE OLYMPIAD", code: "IQSO", level: "Level 2" },
+  IQMOL1: { fullName: "IQNEXUS MATHEMATICS OLYMPIAD", code: "IQMO", level: "Level 1" },
+  IQMOL2: { fullName: "IQNEXUS MATHEMATICS OLYMPIAD", code: "IQMO", level: "Level 2" },
+  IQGKOL1: { fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD", code: "IQGKO", level: "Level 1" },
+  IQGKOL2: { fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD", code: "IQGKO", level: "Level 2" },
+};
+
 const AllStudents = () => {
   const [students, setStudents] = useState([]);
   const [searched, setSearched] = useState(false);
@@ -189,7 +203,7 @@ const AllStudents = () => {
           }
 
           if (node.tagName === "TH") {
-            node.style.border = "0.5px solidrgb(184, 178, 178)";
+            node.style.border = "0.5px solid rgb(184, 178, 178)";
             node.style.textAlign = "center";
             node.style.padding = "3px 5px"; // Increased padding for clarity
           }
@@ -552,8 +566,7 @@ const AllStudents = () => {
 
     if (start > 2) {
       rangeWithDots.push(1);
-      rangeWithDots.pu
-      sh("...");
+      rangeWithDots.push("...");
     }
 
     rangeWithDots.push(...range);
@@ -1132,11 +1145,7 @@ const AllStudents = () => {
                     International Aptitude Olympiad
                   </h1>
                   <p id="exam-name" className="font-medium uppercase">
-                    {selectedExamLevel === "L1"
-                      ? "Basic Exam"
-                      : selectedExamLevel === "L2"
-                        ? "Advanced Exam"
-                        : "Exam Level Not Selected"}
+                    {selectedExam ? `${examFullNames[selectedExam].fullName} ${examFullNames[selectedExam].level}` : "Exam Not Selected"}
                   </p>
                   <h2 className="font-bold uppercase underline mt-2">
                     Attendance List

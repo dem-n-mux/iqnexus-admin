@@ -16,6 +16,7 @@ const AdmitCard = () => {
     examLevel: "",
     session: "",
   });
+  const [examDate, setExamDate] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -88,9 +89,15 @@ const AdmitCard = () => {
     setMessage("");
   };
 
+  const handleExamDateChange = (e) => {
+    setExamDate(e.target.value);
+    setMessage("");
+  };
+
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
     setCurrentPage(1);
+    setExamDate(""); // Reset examDate on new search
     await fetchStudents(1, searchData);
   };
 
@@ -100,6 +107,7 @@ const AdmitCard = () => {
       examLevel: "",
       session: "",
     });
+    setExamDate("");
     setSearched(false);
     setStudents([]);
     setCurrentPage(1);
@@ -117,8 +125,8 @@ const AdmitCard = () => {
   };
 
   const generateAllAdmitCards = async () => {
-    if (!searchData.schoolCode || !searchData.examLevel || !searchData.session) {
-      setMessage("Please fill all filters.");
+    if (!searchData.schoolCode || !searchData.examLevel || !searchData.session || !examDate) {
+      setMessage("Please fill all filters and select an Exam Date.");
       return;
     }
 
@@ -130,6 +138,7 @@ const AdmitCard = () => {
         schoolCode: Number(searchData.schoolCode),
         level: searchData.examLevel,
         session: searchData.session,
+        examDate: examDate,
       });
 
       setMessage(res.data.message);
@@ -183,6 +192,8 @@ const AdmitCard = () => {
     searchData.schoolCode
   );
 
+  const isGenerateDisabled = isSearchDisabled || !students.length || !examDate;
+
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-6xl mx-auto">
@@ -217,9 +228,7 @@ const AdmitCard = () => {
               <Select
                 name="session"
                 options={sessionOptions}
-                value={sessionOptions.find(
-                  (opt) => opt.value === searchData.session
-                )}
+                value={sessionOptions.find((opt) => opt.value === searchData.session)}
                 onChange={handleSessionChange}
                 className="basic-single-select"
                 classNamePrefix="select"
@@ -227,10 +236,15 @@ const AdmitCard = () => {
                 styles={{
                   control: (base) => ({
                     ...base,
-                    padding: "0.1rem",
+                    paddingTop: "0.375rem",
+                    paddingBottom: "0.375rem",
+                    paddingLeft: "0.75rem",
+                    paddingRight: "0.75rem",
                     borderRadius: "0.375rem",
                     borderColor: "#d1d5db",
                     fontSize: "0.875rem",
+                    lineHeight: "1.25rem",
+                    height: "2rem",
                     "&:hover": { borderColor: "#6366f1" },
                   }),
                   menu: (base) => ({
@@ -276,20 +290,34 @@ const AdmitCard = () => {
           <div className="p-4 flex justify-between items-center border-b">
             <h2 className="text-lg font-semibold text-gray-800">Students</h2>
             {students.length > 0 && (
-              <button
-                onClick={generateAllAdmitCards}
-                className="flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isGenerating}
-              >
-                {isGenerating ? (
-                  <>
-                    <span className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                    Generating...
-                  </>
-                ) : (
-                  "Generate All Admit Cards"
-                )}
-              </button>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 min-w-[150px]">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Exam Date
+                  </label>
+                  <input
+                    type="date"
+                    name="examDate"
+                    value={examDate}
+                    onChange={handleExamDateChange}
+                    className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
+                  />
+                </div>
+                <button
+                  onClick={generateAllAdmitCards}
+                  className="flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isGenerating || isGenerateDisabled}
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                      Generating...
+                    </>
+                  ) : (
+                    "Generate All Admit Cards"
+                  )}
+                </button>
+              </div>
             )}
           </div>
           <table className="min-w-full text-sm text-gray-700">
