@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
 import { BASE_URL } from "../Api";
@@ -14,17 +14,28 @@ const AdmitCard = () => {
   const [searchData, setSearchData] = useState({
     schoolCode: "",
     examLevel: "",
-    session: "",
+    // session: "",
   });
   const [examDate, setExamDate] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [message, setMessage] = useState("");
 
-  const sessionOptions = [
-    { value: "2024-25", label: "2024-25" },
-    { value: "2025-26", label: "2025-26" },
-    { value: "2026-27", label: "2026-27" },
-  ];
+  const [schools, setSchools] = useState([])
+
+  useEffect(() => {
+    const fetchSchool = async () => {
+      const res = await axios.get(`${BASE_URL}/all-school-admit-card`);
+      setSchools(res.data.schools);
+    }
+    fetchSchool();
+  }, []);
+
+
+  // const sessionOptions = [
+  //   { value: "2024-25", label: "2024-25" },
+  //   { value: "2025-26", label: "2025-26" },
+  //   { value: "2026-27", label: "2026-27" },
+  // ];
 
   const fetchStudents = async (page, filters = {}) => {
     try {
@@ -45,7 +56,7 @@ const AdmitCard = () => {
         {
           schoolCode: filters.schoolCode ? Number(filters.schoolCode) : undefined,
           examLevel: filters.examLevel || undefined,
-          session: filters.session || undefined,
+          // session: filters.session || undefined,
         }
       );
 
@@ -81,13 +92,13 @@ const AdmitCard = () => {
     setMessage("");
   };
 
-  const handleSessionChange = (selectedOption) => {
-    setSearchData({
-      ...searchData,
-      session: selectedOption ? selectedOption.value : "",
-    });
-    setMessage("");
-  };
+  // const handleSessionChange = (selectedOption) => {
+  //   setSearchData({
+  //     ...searchData,
+  //     session: selectedOption ? selectedOption.value : "",
+  //   });
+  //   setMessage("");
+  // };
 
   const handleExamDateChange = (e) => {
     setExamDate(e.target.value);
@@ -105,7 +116,7 @@ const AdmitCard = () => {
     setSearchData({
       schoolCode: "",
       examLevel: "",
-      session: "",
+      // session: "",
     });
     setExamDate("");
     setSearched(false);
@@ -125,7 +136,8 @@ const AdmitCard = () => {
   };
 
   const generateAllAdmitCards = async () => {
-    if (!searchData.schoolCode || !searchData.examLevel || !searchData.session || !examDate) {
+    // || !searchData.session
+    if (!searchData.schoolCode || !searchData.examLevel || !examDate) {
       setMessage("Please fill all filters and select an Exam Date.");
       return;
     }
@@ -137,11 +149,12 @@ const AdmitCard = () => {
       const res = await axios.post(`${BASE_URL}/admit-card`, {
         schoolCode: Number(searchData.schoolCode),
         level: searchData.examLevel,
-        session: searchData.session,
+        // session: searchData.session,
         examDate: examDate,
       });
 
       setMessage(res.data.message);
+      alert(res.data.message);
     } catch (error) {
       console.error("Error generating admit cards:", error);
       setMessage("Failed to generate admit cards. Please try again.");
@@ -188,7 +201,7 @@ const AdmitCard = () => {
 
   const isSearchDisabled = !(
     searchData.examLevel &&
-    searchData.session &&
+    // searchData.session &&
     searchData.schoolCode
   );
 
@@ -221,7 +234,7 @@ const AdmitCard = () => {
                 <option value="L2">Advance</option>
               </select>
             </div>
-            <div className="flex-1 min-w-[150px]">
+            {/* <div className="flex-1 min-w-[150px]">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Session
               </label>
@@ -253,8 +266,8 @@ const AdmitCard = () => {
                   }),
                 }}
               />
-            </div>
-            <div className="flex-1 min-w-[120px]">
+            </div> */}
+            {/* <div className="flex-1 min-w-[120px]">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 School Code
               </label>
@@ -266,7 +279,29 @@ const AdmitCard = () => {
                 className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
                 placeholder="141"
               />
+            </div> */}
+
+            <div className="flex-1 min-w-[120px]">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                School
+              </label>
+              <select
+                name="schoolCode"
+                value={searchData.schoolCode}
+                onChange={handleSearchChange}
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
+              >
+                <option value="" disabled>
+                  Select a school
+                </option>
+                {schools.map((school) => (
+                  <option key={school.schoolCode} value={school.schoolCode}>
+                    {school.schoolName}
+                  </option>
+                ))}
+              </select>
             </div>
+
             <div className="flex gap-2">
               <button
                 type="button"
@@ -285,6 +320,17 @@ const AdmitCard = () => {
             </div>
           </form>
         </div>
+
+        {message && (
+          <div
+            className={`mt-4 p-4 rounded-md text-sm ${message.includes("Failed")
+              ? "bg-red-100 text-red-700"
+              : "bg-green-100 text-green-700"
+              }`}
+          >
+            {message}
+          </div>
+        )}
 
         <div className="bg-white shadow-lg rounded-xl overflow-hidden">
           <div className="p-4 flex justify-between items-center border-b">
@@ -437,7 +483,7 @@ const AdmitCard = () => {
           )}
         </div>
 
-        {message && (
+        {/* {message && (
           <div
             className={`mt-4 p-4 rounded-md text-sm ${message.includes("Failed")
               ? "bg-red-100 text-red-700"
@@ -446,7 +492,7 @@ const AdmitCard = () => {
           >
             {message}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

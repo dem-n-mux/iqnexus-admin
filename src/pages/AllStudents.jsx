@@ -352,6 +352,7 @@ const AllStudents = () => {
 
       // Save PDF
       pdf.save(filename);
+      alert("Attendence downloaded succesfully!!");
     } catch (err) {
       console.error("PDF generation failed:", err);
       alert("Failed to generate PDF. Check console for details.");
@@ -1142,11 +1143,8 @@ const AllStudents = () => {
                 <div className="text-center mb-6">
                   <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
                   <h1 className="text-lg font-semibold uppercase">
-                    International Aptitude Olympiad
-                  </h1>
-                  <p id="exam-name" className="font-medium uppercase">
                     {selectedExam ? `${examFullNames[selectedExam].fullName} ${examFullNames[selectedExam].level}` : "Exam Not Selected"}
-                  </p>
+                  </h1>
                   <h2 className="font-bold uppercase underline mt-2">
                     Attendance List
                   </h2>
