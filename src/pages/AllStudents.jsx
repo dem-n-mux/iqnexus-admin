@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Select from "react-select";
 import { BASE_URL } from "../Api";
 import html2pdf from "html2pdf.js";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import * as XLSX from 'xlsx';
 import logo from "../assets/main_logo.png";
 
 // List of fields that should be treated as booleans ("0" or "1")
@@ -48,7 +49,7 @@ const AllStudents = () => {
   const [updatedData, setUpdatedData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalStudents, setTotalStudents] = useState(0); // Added for total count
+  const [totalStudents, setTotalStudents] = useState(0);
   const [limit] = useState(10);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [noStudentsFound, setNoStudentsFound] = useState(false);
@@ -65,15 +66,13 @@ const AllStudents = () => {
   const [selectedExamLevel, setSelectedExamLevel] = useState('');
   const [selectedExam, setSelectedExam] = useState('');
   const [selectedSchoolCode, setSelectedSchoolCode] = useState('');
-  // const [selectedClass, setSelectedClass] = useState('');
-  // const [selectedSection, setSelectedSection] = useState('');
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
   const [school, setSchool] = useState({});
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isFetching, setIsFetching] = useState(false); // Loader state for Fetch button
-  const [isFetched, setIsFetched] = useState(false); // Track if data has been fetched
+  const [isFetching, setIsFetching] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
 
   const attendanceRef = useRef(null);
 
@@ -160,21 +159,21 @@ const AllStudents = () => {
           node.style.backgroundColor = "transparent";
           node.style.borderColor = "#000000";
           node.style.fontFamily = "Arial, sans-serif";
-          node.style.fontSize = "12px"; // Slightly reduced for better fit
-          node.style.lineHeight = "1.5"; // Adjusted for readability
+          node.style.fontSize = "12px";
+          node.style.lineHeight = "1.5";
 
           // Center content
           if (node.tagName === "H1" || node.tagName === "H2") {
             node.style.textAlign = "center";
             node.style.textTransform = "uppercase";
-            node.style.marginBottom = "6px"; // Increased spacing
-            node.style.fontSize = "14px"; // Slightly larger for headers
+            node.style.marginBottom = "6px";
+            node.style.fontSize = "14px";
           }
 
           if (node.tagName === "P") {
             node.style.textAlign = "left";
             node.style.textTransform = "uppercase";
-            node.style.marginBottom = "6px"; // Increased spacing
+            node.style.marginBottom = "6px";
           }
 
           if (node.id == "exam-name") {
@@ -186,13 +185,13 @@ const AllStudents = () => {
             node.style.display = "block";
             node.style.marginLeft = "auto";
             node.style.marginRight = "auto";
-            node.style.height = "45px"; // Slightly larger logo
+            node.style.height = "45px";
             node.style.marginBottom = "10px";
           }
 
           // Center grids and tables
           if (node.classList.contains("grid") || node.tagName === "TABLE") {
-            node.style.width = "85%"; // Slightly wider for better content fit
+            node.style.width = "85%";
             node.style.marginLeft = "auto";
             node.style.marginRight = "auto";
             node.style.fontSize = "10px";
@@ -205,7 +204,7 @@ const AllStudents = () => {
           if (node.tagName === "TH") {
             node.style.border = "0.5px solid rgb(184, 178, 178)";
             node.style.textAlign = "center";
-            node.style.padding = "3px 5px"; // Increased padding for clarity
+            node.style.padding = "3px 5px";
           }
 
           if (node.tagName === "TD") {
@@ -216,7 +215,7 @@ const AllStudents = () => {
 
           if (node.tagName === "TH") {
             node.style.backgroundColor = "#e5e7eb";
-            node.style.fontWeight = "600"; // Bolder for emphasis
+            node.style.fontWeight = "600";
           }
 
           // Note section
@@ -227,12 +226,12 @@ const AllStudents = () => {
             node.style.width = "85%";
             node.style.marginLeft = "auto";
             node.style.marginRight = "auto";
-            node.style.fontSize = "9px"; // Slightly smaller for note
+            node.style.fontSize = "9px";
           }
 
           // Root div
           if (node.id === "download") {
-            node.style.padding = "20px"; // Increased padding
+            node.style.padding = "20px";
             node.style.border = "1px solid #000000";
             node.style.backgroundColor = "#ffffff";
             node.style.width = "100%";
@@ -260,8 +259,8 @@ const AllStudents = () => {
         scale: 1.5,
         useCORS: true,
         logging: true,
-        windowWidth: element.scrollWidth + 50, // Increased padding
-        windowHeight: element.scrollHeight + 50, // Increased padding
+        windowWidth: element.scrollWidth + 50,
+        windowHeight: element.scrollHeight + 50,
       });
 
       // Restore original styles and positioning
@@ -289,8 +288,8 @@ const AllStudents = () => {
         format: "a4",
       });
 
-      const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-      const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 15;
       const contentWidth = pageWidth - 2 * margin;
       const imgWidth = contentWidth;
@@ -301,10 +300,8 @@ const AllStudents = () => {
 
       // Simplified pagination logic
       if (imgHeight <= maxContentHeight) {
-        // Single page for all content
         pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight, undefined, "SLOW");
       } else {
-        // Paginate content
         let position = 0;
         while (position < imgHeight) {
           const tempCanvas = document.createElement("canvas");
@@ -352,12 +349,57 @@ const AllStudents = () => {
 
       // Save PDF
       pdf.save(filename);
-      alert("Attendence downloaded succesfully!!");
+      alert("Attendance downloaded successfully!!");
     } catch (err) {
       console.error("PDF generation failed:", err);
       alert("Failed to generate PDF. Check console for details.");
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  // New function to handle Excel download
+  const handleDownloadExcel = () => {
+    if (students.length === 0) {
+      alert("No student data to export!");
+      return;
+    }
+
+    try {
+      // Prepare data for Excel
+      const excelData = students.map((student, index) => ({
+        "S.No": index + 1,
+        "Student Name": student.studentName || "N/A",
+        "DOB": student.dob || "N/A",
+        "Roll No": student.rollNo || "N/A",
+        "Mobile": student.mobNo || "N/A",
+        "School Code": student.schoolCode || "N/A",
+        "Class": student.class || "N/A",
+        "Section": student.section || "N/A",
+        "Father Name": student.fatherName || "N/A",
+        "Mother Name": student.motherName || "N/A",
+        ...booleanFields.reduce((acc, field) => ({
+          ...acc,
+          [field]: student[field] === "1" || student[field] === true ? "Yes" : "No",
+        }), {}),
+      }));
+
+      // Create worksheet
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Students");
+
+      // Generate filename based on filters
+      const classString = searchData.classes.length > 0 ? searchData.classes.join('-') : 'All';
+      const sectionString = searchData.sections.length > 0 ? searchData.sections.join('-') : 'All';
+      const filename = `Students_${classString}_${sectionString}${searchData.schoolCode ? `_${searchData.schoolCode}` : ''}${searchData.subject ? `_${searchData.subject}` : ''}.xlsx`;
+
+      // Download Excel file
+      XLSX.writeFile(wb, filename);
+      alert("Student data downloaded successfully as Excel!");
+    } catch (err) {
+      console.error("Excel generation failed:", err);
+      alert("Failed to generate Excel file. Check console for details.");
     }
   };
 
@@ -491,6 +533,7 @@ const AllStudents = () => {
       }
     }
   };
+
   const handleUpdateChange = (e) => {
     const { name, value, type, checked } = e.target;
     setUpdatedData((prev) => ({
@@ -504,7 +547,6 @@ const AllStudents = () => {
     const formattedData = {};
     Object.keys(student).forEach((key) => {
       if (booleanFields.includes(key)) {
-        // Convert to boolean: "1" -> true, "0" -> false, or use existing boolean
         formattedData[key] = student[key] === "1" || student[key] === true;
       } else if (key === "schoolCode") {
         formattedData[key] = student[key] ? Number(student[key]) : "";
@@ -516,14 +558,13 @@ const AllStudents = () => {
     setIsModalOpen(true);
   };
 
-  // In handleUpdateSubmit, include _id and handle errors
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     try {
       const payload = { _id: selectedStudent._id };
       Object.keys(updatedData).forEach((key) => {
         if (booleanFields.includes(key)) {
-          payload[key] = updatedData[key] ? "1" : "0"; // Backend expects "1" or "0" for string fields
+          payload[key] = updatedData[key] ? "1" : "0";
         } else {
           payload[key] = updatedData[key];
         }
@@ -614,6 +655,12 @@ const AllStudents = () => {
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
             >
               Get Attendance
+            </button>
+            <button
+              onClick={handleDownloadExcel}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              Download Excel
             </button>
           </div>
         </div>
@@ -1012,8 +1059,7 @@ const AllStudents = () => {
           </div>
         )}
 
-
-
+        {/* Attendance Modal */}
         {isAttendanceModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div
@@ -1133,7 +1179,6 @@ const AllStudents = () => {
               </div>
 
               {/* Preview Student Data */}
-
               <div
                 id="download"
                 style={{ color: "#000000", backgroundColor: "#ffffff" }}
@@ -1165,17 +1210,8 @@ const AllStudents = () => {
                     </p>
                   </div>
                   <div>
-                    {/* <p>
-                      <strong>Class:</strong> {selectedClass || "N/A"}
-                    </p>
-                    <p>
-                      <strong>Section:</strong> {selectedSection || "N/A"}
-                    </p> */}
                     <p>
                       <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
-                    </p>
-                    <p>
-                      {/* <strong>Class Teacher:</strong> {school.incharge || "N/A"} */}
                     </p>
                     <p>
                       <strong>Print Date:</strong> {new Date().toLocaleDateString()}
@@ -1253,7 +1289,6 @@ const AllStudents = () => {
                 <div className="mt-2"></div>
               </div>
 
-
               {/* Actions */}
               <div className="flex justify-between mt-2">
                 <button
@@ -1284,7 +1319,6 @@ const AllStudents = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
