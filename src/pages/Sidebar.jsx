@@ -155,8 +155,8 @@ const Sidebar = () => {
         </div> */}
 
         <MenuItem
-          icon={<UserPlus size={20} />}
-          text="All Kindergarten Students"
+          icon={<Users size={20} />}
+          text="All KG Students"
           href="/allkindargartenStudents"
           active={location.pathname === "/allkindargartenStudents"}
           onClick={closeSidebar}
@@ -164,15 +164,15 @@ const Sidebar = () => {
 
         <MenuItem
           icon={<UserPlus size={20} />}
-          text="Kindergarten Student"
+          text="KG Student"
           href="/kindargartenStudent"
           active={location.pathname === "/kindargartenStudent"}
           onClick={closeSidebar}
         />
 
         <MenuItem
-          icon={<UserPlus size={20} />}
-          text="Upload Kindergarten Student"
+          icon={<FileUp size={20} />}
+          text="Upload KG Student"
           href="/uploadKindergartenStudentData"
           active={location.pathname === "/uploadKindergartenStudentData"}
           onClick={closeSidebar}
