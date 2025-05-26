@@ -11,6 +11,9 @@ import AllSchools from "./pages/AllSchools";
 import AllStudents from "./pages/AllStudents";
 import LoginPage from "./pages/LoginPage";
 import AdmitCard from "./pages/AdmitCard"
+import KinderGartenStudentForm from "./pages/kindergarten-student-form"
+import AllKindergartenStudents from "./pages/AllKindergartenStudent"
+import UploadBulkKindergartenStudentData from "./pages/UploadBulkKindergartenStudent"
 
 const App = () => {
   return (
@@ -28,6 +31,9 @@ const App = () => {
             <Route path="/allSchools" element={< AllSchools />} />
             <Route path="/allStudents" element={< AllStudents />} />
             <Route path="/genrate-admit-card" element={< AdmitCard />} />
+            <Route path="/allkindargartenStudents" element={< AllKindergartenStudents />} />
+            <Route path="/kindargartenStudent" element={< KinderGartenStudentForm />} />
+            <Route path="/uploadKindergartenStudentData" element={< UploadBulkKindergartenStudentData />} />
           </Route>
         </Routes>
       </Router>

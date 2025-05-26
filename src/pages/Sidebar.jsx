@@ -153,6 +153,31 @@ const Sidebar = () => {
             onClick={closeSidebar}
           />
         </div> */}
+
+        <MenuItem
+          icon={<UserPlus size={20} />}
+          text="All Kindergarten Students"
+          href="/allkindargartenStudents"
+          active={location.pathname === "/allkindargartenStudents"}
+          onClick={closeSidebar}
+        />
+
+        <MenuItem
+          icon={<UserPlus size={20} />}
+          text="Kindergarten Student"
+          href="/kindargartenStudent"
+          active={location.pathname === "/kindargartenStudent"}
+          onClick={closeSidebar}
+        />
+
+        <MenuItem
+          icon={<UserPlus size={20} />}
+          text="Upload Kindergarten Student"
+          href="/uploadKindergartenStudentData"
+          active={location.pathname === "/uploadKindergartenStudentData"}
+          onClick={closeSidebar}
+        />
+
       </aside>
 
       {/* Main Content */}

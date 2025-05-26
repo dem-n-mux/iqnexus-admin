@@ -358,16 +358,53 @@ const AllStudents = () => {
     }
   };
 
-  // New function to handle Excel download
-  const handleDownloadExcel = () => {
-    if (students.length === 0) {
+  // Fetch all students for Excel download without pagination
+  const fetchAllStudentsForExcel = async (filters) => {
+    try {
+      const hasFilters = Object.values(filters).some(
+        (val) =>
+          (Array.isArray(val) ? val.length > 0 : val !== "" && val !== null) &&
+          val !== undefined
+      );
+
+      let res;
+      if (hasFilters) {
+        res = await axios.post(`${BASE_URL}/all-students-no-pagination`, {
+          schoolCode: filters.schoolCode ? Number(filters.schoolCode) : undefined,
+          className: filters.classes.length > 0 ? filters.classes : undefined,
+          rollNo: filters.rollNo || undefined,
+          section: filters.sections.length > 0 ? filters.sections : undefined,
+          studentName: filters.studentName || undefined,
+          subject: filters.subject || undefined,
+        });
+      } else {
+        res = await axios.post(`${BASE_URL}/all-students-no-pagination`, {});
+      }
+
+      if (res.data.success) {
+        return res.data.data || [];
+      } else {
+        alert("No students found for the selected filters.");
+        return [];
+      }
+    } catch (err) {
+      console.error("Failed to fetch all students for Excel:", err);
+      alert("Failed to fetch students for Excel download.");
+      return [];
+    }
+  };
+
+  // Handle Excel download
+  const handleDownloadExcel = async () => {
+    const allStudents = await fetchAllStudentsForExcel(searchData);
+    if (allStudents.length === 0) {
       alert("No student data to export!");
       return;
     }
 
     try {
       // Prepare data for Excel
-      const excelData = students.map((student, index) => ({
+      const excelData = allStudents.map((student, index) => ({
         "S.No": index + 1,
         "Student Name": student.studentName || "N/A",
         "DOB": student.dob || "N/A",

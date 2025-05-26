@@ -113,8 +113,8 @@ const UploadBulkSchoolData = () => {
           <div className="space-y-6">
             <div
               className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer ${isDragging
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-300 hover:border-gray-400"
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-300 hover:border-gray-400"
                 }`}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
@@ -168,10 +168,10 @@ const UploadBulkSchoolData = () => {
             {uploadStatus && (
               <div
                 className={`p-4 rounded-lg text-sm flex items-center gap-2 ${uploadStatus.type === "success"
-                    ? "bg-green-100 text-green-800"
-                    : uploadStatus.type === "error"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-blue-100 text-blue-800"
+                  ? "bg-green-100 text-green-800"
+                  : uploadStatus.type === "error"
+                    ? "bg-red-100 text-red-800"
+                    : "bg-blue-100 text-blue-800"
                   }`}
               >
                 {uploadStatus.type === "success" ? (

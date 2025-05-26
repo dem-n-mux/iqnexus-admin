@@ -81,9 +81,8 @@ const UpdateStudent = () => {
       <div className="max-w-4xl mx-auto">
         {/* Search Form */}
         <div
-          className={`bg-white shadow-xl rounded-xl p-8 transition-all duration-300 ${
-            isModalOpen ? "opacity-50 blur-sm" : "opacity-100"
-          }`}
+          className={`bg-white shadow-xl rounded-xl p-8 transition-all duration-300 ${isModalOpen ? "opacity-50 blur-sm" : "opacity-100"
+            }`}
         >
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Find Student to Update
@@ -201,9 +200,8 @@ const UpdateStudent = () => {
         {/* Student List */}
         {students.length > 0 && (
           <div
-            className={`bg-white shadow-xl rounded-xl p-6 mt-6 space-y-4 transition-all duration-300 ${
-              isModalOpen ? "opacity-50 blur-sm" : "opacity-100"
-            }`}
+            className={`bg-white shadow-xl rounded-xl p-6 mt-6 space-y-4 transition-all duration-300 ${isModalOpen ? "opacity-50 blur-sm" : "opacity-100"
+              }`}
           >
             <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
               Select a Student to Update
@@ -258,15 +256,13 @@ const UpdateStudent = () => {
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ease-in-out">
             <div
-              className={`absolute inset-0 bg-gray-600 bg-opacity-50 backdrop-blur-sm transition-opacity duration-300 ${
-                isModalOpen ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 bg-gray-600 bg-opacity-50 backdrop-blur-sm transition-opacity duration-300 ${isModalOpen ? "opacity-100" : "opacity-0"
+                }`}
               onClick={() => setIsModalOpen(false)}
             />
             <div
-              className={`bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-in-out ${
-                isModalOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
+              className={`bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-in-out ${isModalOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                }`}
             >
               <div className="bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-4 flex justify-between items-center rounded-t-xl">
                 <h3 className="text-xl font-bold text-white">
@@ -306,14 +302,14 @@ const UpdateStudent = () => {
                         {field === "studentName"
                           ? "Student Name"
                           : field === "fatherName"
-                          ? "Father Name"
-                          : field === "motherName"
-                          ? "Mother Name"
-                          : field === "dob"
-                          ? "Date of Birth"
-                          : field === "rollNo"
-                          ? "Roll Number"
-                          : "Class"}
+                            ? "Father Name"
+                            : field === "motherName"
+                              ? "Mother Name"
+                              : field === "dob"
+                                ? "Date of Birth"
+                                : field === "rollNo"
+                                  ? "Roll Number"
+                                  : "Class"}
                       </label>
                       <input
                         type={field === "dob" ? "date" : "text"}
