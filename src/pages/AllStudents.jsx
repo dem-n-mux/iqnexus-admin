@@ -821,10 +821,10 @@ const AllStudents = () => {
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
                 >
                   <option value="">Select Subject</option>
-                  <option value="IAO">IQRO</option>
-                  <option value="ITST">IQSO</option>
-                  <option value="IMO">IQMO</option>
-                  <option value="IGKO">IQGKO</option>
+                  <option value="IAO">IAO</option>
+                  <option value="ITST">ITST</option>
+                  <option value="IMO">IMO</option>
+                  <option value="IGKO">IGKO</option>
                 </select>
               </div>
               <div className="flex gap-2">

@@ -44,6 +44,24 @@ const SingleStudentForm = () => {
     }
   };
 
+  // Mapping for UI display names
+  const examFieldDisplayNames = {
+    IAOL1: "IQROL1",
+    IAOL1Book: "IQROL1 Book",
+    ITSTL1: "IQSOL1",
+    ITSTL1Book: "IQSOL1 Book",
+    IMOL1: "IQMOL1",
+    IMOL1Book: "IQMOL1 Book",
+    IGKOL1: "IQGKOL1",
+    IGKOL1Book: "IQGKOL1 Book",
+    IENGOL1: "IQEOL1",
+    IENGOL1Book: "IQEOL1 Book",
+    IAOL2: "IQROL2",
+    ITSTL2: "IQSOL2",
+    IMOL2: "IQMOL2",
+    IENGOL2: "IQEOL2"
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-0 md:py-4 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -305,11 +323,11 @@ const SingleStudentForm = () => {
                     ].map((field) => (
                       <div key={field}>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {field}
+                          {examFieldDisplayNames[field]}
                         </label>
                         <select
                           {...register(field, {
-                            required: `${field} is required`,
+                            required: `${examFieldDisplayNames[field]} is required`,
                           })}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                         >
@@ -333,14 +351,14 @@ const SingleStudentForm = () => {
                     Advanced Exam Information (Level 2)
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {["IAOL2", "ITSTL2", "IMOL2", "IENGOL2",].map((field) => (
+                    {["IAOL2", "ITSTL2", "IMOL2", "IENGOL2"].map((field) => (
                       <div key={field}>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {field}
+                          {examFieldDisplayNames[field]}
                         </label>
                         <select
                           {...register(field, {
-                            required: `${field} is required`,
+                            required: `${examFieldDisplayNames[field]} is required`,
                           })}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                         >
