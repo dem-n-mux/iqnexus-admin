@@ -231,8 +231,26 @@ const AllKindergartenStudents = () => {
     };
 
     // Open update modal
+    // const openUpdateModal = (student) => {
+    //     setSelectedStudent(student);
+    //     const formattedData = {
+    //         rollNo: student.rollNo || "",
+    //         schoolCode: student.schoolCode ? Number(student.schoolCode) : "",
+    //         section: student.section || "",
+    //         studentName: student.studentName || "",
+    //         motherName: student.motherName || "",
+    //         fatherName: student.fatherName || "",
+    //         dob: student.dob || "",
+    //         mobNo: student.mobNo || "",
+    //         city: student.city || "",
+    //         IQKG: student.IQKG || "0",
+    //         Duplicates: student.Duplicates === true,
+    //     };
+    //     setUpdatedData(formattedData);
+    //     setIsModalOpen(true);
+    // };
+
     const openUpdateModal = (student) => {
-        setSelectedStudent(student);
         const formattedData = {
             rollNo: student.rollNo || "",
             schoolCode: student.schoolCode ? Number(student.schoolCode) : "",
@@ -244,8 +262,25 @@ const AllKindergartenStudents = () => {
             mobNo: student.mobNo || "",
             city: student.city || "",
             IQKG: student.IQKG || "0",
+            IQKG1: student.IQKG1 || "",
+            IQKG2: student.IQKG2 || "",
             Duplicates: student.Duplicates === true,
+            totalBasicLevelParticipatedExams: student.totalBasicLevelParticipatedExams || "",
+            advanceLevelAmountPaid: student.advanceLevelAmountPaid || "",
+            advanceLevelAmountPaidOnline: student.advanceLevelAmountPaidOnline || "",
+            totalAmountPaid: student.totalAmountPaid || "",
+            totalAmountPaidOnline: student.totalAmountPaidOnline || "",
+            basicLevelFullAmount: student.basicLevelFullAmount || "",
+            basicLevelAmountPaid: student.basicLevelAmountPaid || "",
+            basicLevelAmountPaidOnline: student.basicLevelAmountPaidOnline || "",
+            isBasicLevelConcessionGiven: student.isBasicLevelConcessionGiven || "",
+            concessionReason: student.concessionReason || "",
+            remark: student.remark || "",
+            ParentsWorkingschool: student.ParentsWorkingschool || "",
+            designation: student.designation || "",
         };
+
+        setSelectedStudent(student);
         setUpdatedData(formattedData);
         setIsModalOpen(true);
     };
