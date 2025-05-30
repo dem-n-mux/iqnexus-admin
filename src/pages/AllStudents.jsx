@@ -3,9 +3,9 @@ import axios from "axios";
 import Select from "react-select";
 import { BASE_URL } from "../Api";
 import html2pdf from "html2pdf.js";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import * as XLSX from 'xlsx';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 import logo from "../assets/main_logo.png";
 
 // List of fields that should be treated as booleans ("0" or "1")
@@ -29,16 +29,56 @@ const booleanFields = [
 
 // Map exam codes to full names
 const examFullNames = {
-  IQEOL1: { fullName: "IQNEXUS ENGLISH OLYMPIAD", code: "IQEO", level: "Level 1" },
-  IQEOL2: { fullName: "IQNEXUS ENGLISH OLYMPIAD", code: "IQEO", level: "Level 2" },
-  IQROL1: { fullName: "IQNEXUS REASONING OLYMPIAD", code: "IQRO", level: "Level 1" },
-  IQROL2: { fullName: "IQNEXUS REASONING OLYMPIAD", code: "IQRO", level: "Level 2" },
-  IQSOL1: { fullName: "IQNEXUS SCIENCE OLYMPIAD", code: "IQSO", level: "Level 1" },
-  IQSOL2: { fullName: "IQNEXUS SCIENCE OLYMPIAD", code: "IQSO", level: "Level 2" },
-  IQMOL1: { fullName: "IQNEXUS MATHEMATICS OLYMPIAD", code: "IQMO", level: "Level 1" },
-  IQMOL2: { fullName: "IQNEXUS MATHEMATICS OLYMPIAD", code: "IQMO", level: "Level 2" },
-  IQGKOL1: { fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD", code: "IQGKO", level: "Level 1" },
-  IQGKOL2: { fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD", code: "IQGKO", level: "Level 2" },
+  IQEOL1: {
+    fullName: "IQNEXUS ENGLISH OLYMPIAD",
+    code: "IQEO",
+    level: "Level 1",
+  },
+  IQEOL2: {
+    fullName: "IQNEXUS ENGLISH OLYMPIAD",
+    code: "IQEO",
+    level: "Level 2",
+  },
+  IQROL1: {
+    fullName: "IQNEXUS REASONING OLYMPIAD",
+    code: "IQRO",
+    level: "Level 1",
+  },
+  IQROL2: {
+    fullName: "IQNEXUS REASONING OLYMPIAD",
+    code: "IQRO",
+    level: "Level 2",
+  },
+  IQSOL1: {
+    fullName: "IQNEXUS SCIENCE OLYMPIAD",
+    code: "IQSO",
+    level: "Level 1",
+  },
+  IQSOL2: {
+    fullName: "IQNEXUS SCIENCE OLYMPIAD",
+    code: "IQSO",
+    level: "Level 2",
+  },
+  IQMOL1: {
+    fullName: "IQNEXUS MATHEMATICS OLYMPIAD",
+    code: "IQMO",
+    level: "Level 1",
+  },
+  IQMOL2: {
+    fullName: "IQNEXUS MATHEMATICS OLYMPIAD",
+    code: "IQMO",
+    level: "Level 2",
+  },
+  IQGKOL1: {
+    fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD",
+    code: "IQGKO",
+    level: "Level 1",
+  },
+  IQGKOL2: {
+    fullName: "IQNEXUS GENERAL KNOWLEDGE OLYMPIAD",
+    code: "IQGKO",
+    level: "Level 2",
+  },
 };
 
 const AllStudents = () => {
@@ -63,9 +103,9 @@ const AllStudents = () => {
   });
 
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
-  const [selectedExamLevel, setSelectedExamLevel] = useState('');
-  const [selectedExam, setSelectedExam] = useState('');
-  const [selectedSchoolCode, setSelectedSchoolCode] = useState('');
+  const [selectedExamLevel, setSelectedExamLevel] = useState("");
+  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedSchoolCode, setSelectedSchoolCode] = useState("");
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
@@ -100,8 +140,14 @@ const AllStudents = () => {
       examLevel: selectedExamLevel,
       exam: selectedExam || undefined,
       schoolCode: selectedSchoolCode || undefined,
-      classes: selectedClasses.length > 0 ? selectedClasses.map(opt => opt.value) : undefined,
-      sections: selectedSections.length > 0 ? selectedSections.map(opt => opt.value) : undefined,
+      classes:
+        selectedClasses.length > 0
+          ? selectedClasses.map((opt) => opt.value)
+          : undefined,
+      sections:
+        selectedSections.length > 0
+          ? selectedSections.map((opt) => opt.value)
+          : undefined,
     };
 
     try {
@@ -300,7 +346,16 @@ const AllStudents = () => {
 
       // Simplified pagination logic
       if (imgHeight <= maxContentHeight) {
-        pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight, undefined, "SLOW");
+        pdf.addImage(
+          imgData,
+          "PNG",
+          margin,
+          margin,
+          imgWidth,
+          imgHeight,
+          undefined,
+          "SLOW"
+        );
       } else {
         let position = 0;
         while (position < imgHeight) {
@@ -343,9 +398,11 @@ const AllStudents = () => {
       }
 
       // Generate filename with multiple classes and sections
-      const classString = selectedClasses.map(opt => opt.value).join('-');
-      const sectionString = selectedSections.map(opt => opt.value).join('-');
-      const filename = `Attendance_${classString}_${sectionString}${selectedExam ? `_${selectedExam}` : ''}${selectedSchoolCode ? `_${selectedSchoolCode}` : ''}.pdf`;
+      const classString = selectedClasses.map((opt) => opt.value).join("-");
+      const sectionString = selectedSections.map((opt) => opt.value).join("-");
+      const filename = `Attendance_${classString}_${sectionString}${
+        selectedExam ? `_${selectedExam}` : ""
+      }${selectedSchoolCode ? `_${selectedSchoolCode}` : ""}.pdf`;
 
       // Save PDF
       pdf.save(filename);
@@ -370,7 +427,9 @@ const AllStudents = () => {
       let res;
       if (hasFilters) {
         res = await axios.post(`${BASE_URL}/all-students-no-pagination`, {
-          schoolCode: filters.schoolCode ? Number(filters.schoolCode) : undefined,
+          schoolCode: filters.schoolCode
+            ? Number(filters.schoolCode)
+            : undefined,
           className: filters.classes.length > 0 ? filters.classes : undefined,
           rollNo: filters.rollNo || undefined,
           section: filters.sections.length > 0 ? filters.sections : undefined,
@@ -394,6 +453,7 @@ const AllStudents = () => {
     }
   };
 
+
   // Handle Excel download
   const handleDownloadExcel = async () => {
     const allStudents = await fetchAllStudentsForExcel(searchData);
@@ -404,22 +464,87 @@ const AllStudents = () => {
 
     try {
       // Prepare data for Excel
-      const excelData = allStudents.map((student, index) => ({
-        "S.No": index + 1,
-        "Student Name": student.studentName || "N/A",
-        "DOB": student.dob || "N/A",
-        "Roll No": student.rollNo || "N/A",
-        "Mobile": student.mobNo || "N/A",
-        "School Code": student.schoolCode || "N/A",
-        "Class": student.class || "N/A",
-        "Section": student.section || "N/A",
-        "Father Name": student.fatherName || "N/A",
-        "Mother Name": student.motherName || "N/A",
-        ...booleanFields.reduce((acc, field) => ({
-          ...acc,
-          [field]: student[field] === "1" || student[field] === true ? "Yes" : "No",
-        }), {}),
-      }));
+      // const excelData = allStudents.map((student, index) => ({
+      //   "S.No": index + 1,
+      //   "Student Name": student.studentName || "N/A",
+      //   "DOB": student.dob || "N/A",
+      //   "Roll No": student.rollNo || "N/A",
+      //   "Mobile": student.mobNo || "N/A",
+      //   "School Code": student.schoolCode || "N/A",
+      //   "Class": student.class || "N/A",
+      //   "Section": student.section || "N/A",
+      //   "Father Name": student.fatherName || "N/A",
+      //   "Mother Name": student.motherName || "N/A",
+      //   ...booleanFields.reduce((acc, field) => ({
+      //     ...acc,
+      //     [field]: student[field] === "1" || student[field] === true ? "Yes" : "No",
+      //   }), {}),
+      //     "Total Basic Level Participated Exams": student.totalBasicLevelParticipatedExams,
+      //           "Basic Level Full Amount": student.basicLevelFullAmount,
+      //           "Basic Level Paid Amount": student.basicLevelAmountPaid,
+      //           "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
+      //           "Is Basic Level Concession Given": student.isBasicLevelConcessionGiven,
+      //           "Concession Reason": student.concessionReason,
+      //           "Parents Working School": student.ParentsWorkingschool,
+      //           "Designation": student.designation,
+      //           "City": student.city || "N/A",
+      //           "Advance Level Paid Amount": student.advanceLevelAmountPaid,
+      //           "Advance Level Amount Paid Online": student.advanceLevelAmountPaidOnline,
+      //           "Total Amount Paid": student.totalAmountPaid,
+      //           "Total Amount Paid Online": student.totalAmountPaidOnline
+      // }));
+
+       const subjectNameMap = {
+    IMOL: "IQMO",
+    ITSTL: "IQSO",
+    IENGOL: "IQEO",
+    IAOL: "IQRO",
+    IGKOL: "IQGKO",
+  };
+
+  // Prepare data for Excel
+  const excelData = allStudents.map((student, index) => {
+    const booleanMappedFields = booleanFields.reduce((acc, field) => {
+      // Replace subject codes with mapped labels in the Excel column name
+      let replacedField = field;
+      Object.entries(subjectNameMap).forEach(([code, label]) => {
+        if (field.includes(code)) {
+          replacedField = field.replace(code, label);
+        }
+      });
+
+      acc[replacedField] = student[field] === "1" || student[field] === true ? "Yes" : "No";
+      return acc;
+    }, {});
+
+    return {
+      "S.No": index + 1,
+      "Student Name": student.studentName || "N/A",
+      "DOB": student.dob || "N/A",
+      "Roll No": student.rollNo || "N/A",
+      "Mobile": student.mobNo || "N/A",
+      "School Code": student.schoolCode || "N/A",
+      "Class": student.class || "N/A",
+      "Section": student.section || "N/A",
+      "Father Name": student.fatherName || "N/A",
+      "Mother Name": student.motherName || "N/A",
+      ...booleanMappedFields,
+      "Total Basic Level Participated Exams": student.totalBasicLevelParticipatedExams,
+      "Basic Level Full Amount": student.basicLevelFullAmount,
+      "Basic Level Paid Amount": student.basicLevelAmountPaid,
+      "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
+      "Is Basic Level Concession Given": student.isBasicLevelConcessionGiven,
+      "Concession Reason": student.concessionReason,
+      "Parents Working School": student.ParentsWorkingschool,
+      "Designation": student.designation,
+      "City": student.city || "N/A",
+      "Advance Level Paid Amount": student.advanceLevelAmountPaid,
+      "Advance Level Amount Paid Online": student.advanceLevelAmountPaidOnline,
+      "Total Amount Paid": student.totalAmountPaid,
+      "Total Amount Paid Online": student.totalAmountPaidOnline
+    };
+  });
+
 
       // Create worksheet
       const ws = XLSX.utils.json_to_sheet(excelData);
@@ -427,9 +552,13 @@ const AllStudents = () => {
       XLSX.utils.book_append_sheet(wb, ws, "Students");
 
       // Generate filename based on filters
-      const classString = searchData.classes.length > 0 ? searchData.classes.join('-') : 'All';
-      const sectionString = searchData.sections.length > 0 ? searchData.sections.join('-') : 'All';
-      const filename = `Students_${classString}_${sectionString}${searchData.schoolCode ? `_${searchData.schoolCode}` : ''}${searchData.subject ? `_${searchData.subject}` : ''}.xlsx`;
+      const classString =
+        searchData.classes.length > 0 ? searchData.classes.join("-") : "All";
+      const sectionString =
+        searchData.sections.length > 0 ? searchData.sections.join("-") : "All";
+      const filename = `Students_${classString}_${sectionString}${
+        searchData.schoolCode ? `_${searchData.schoolCode}` : ""
+      }${searchData.subject ? `_${searchData.subject}` : ""}.xlsx`;
 
       // Download Excel file
       XLSX.writeFile(wb, filename);
@@ -976,10 +1105,11 @@ const AllStudents = () => {
                       <button
                         key={idx}
                         onClick={() => handlePageChange(item)}
-                        className={`px-3 py-1 rounded-md ${currentPage === item
-                          ? "bg-indigo-600 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === item
+                            ? "bg-indigo-600 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
                       >
                         {item}
                       </button>
@@ -1034,10 +1164,11 @@ const AllStudents = () => {
                                   [field]: true,
                                 }))
                               }
-                              className={`px-4 py-2 text-sm font-medium ${updatedData[field]
-                                ? "bg-green-600 text-white"
-                                : "bg-gray-100 text-gray-700"
-                                } rounded-l-md hover:bg-green-500 hover:text-white transition`}
+                              className={`px-4 py-2 text-sm font-medium ${
+                                updatedData[field]
+                                  ? "bg-green-600 text-white"
+                                  : "bg-gray-100 text-gray-700"
+                              } rounded-l-md hover:bg-green-500 hover:text-white transition`}
                             >
                               Yes
                             </button>
@@ -1049,10 +1180,11 @@ const AllStudents = () => {
                                   [field]: false,
                                 }))
                               }
-                              className={`px-4 py-2 text-sm font-medium ${!updatedData[field]
-                                ? "bg-red-600 text-white"
-                                : "bg-gray-100 text-gray-700"
-                                } rounded-r-md hover:bg-red-500 hover:text-white transition`}
+                              className={`px-4 py-2 text-sm font-medium ${
+                                !updatedData[field]
+                                  ? "bg-red-600 text-white"
+                                  : "bg-gray-100 text-gray-700"
+                              } rounded-r-md hover:bg-red-500 hover:text-white transition`}
                             >
                               No
                             </button>
@@ -1063,8 +1195,8 @@ const AllStudents = () => {
                               field === "dob"
                                 ? "date"
                                 : field === "schoolCode"
-                                  ? "number"
-                                  : "text"
+                                ? "number"
+                                : "text"
                             }
                             name={field}
                             value={updatedData[field]}
@@ -1109,7 +1241,9 @@ const AllStudents = () => {
               {/* Filters Form */}
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium">Exam Level</label>
+                  <label className="block text-sm font-medium">
+                    Exam Level
+                  </label>
                   <select
                     className="mt-1 w-full border rounded px-3 py-2"
                     value={selectedExamLevel}
@@ -1121,7 +1255,9 @@ const AllStudents = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">Select Exam</label>
+                  <label className="block text-sm font-medium">
+                    Select Exam
+                  </label>
                   <select
                     className="mt-1 w-full border rounded px-3 py-2"
                     value={selectedExam}
@@ -1138,7 +1274,9 @@ const AllStudents = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">School Code</label>
+                  <label className="block text-sm font-medium">
+                    School Code
+                  </label>
                   <input
                     type="number"
                     className="mt-1 w-full border rounded px-3 py-2"
@@ -1148,7 +1286,9 @@ const AllStudents = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">Select Classes</label>
+                  <label className="block text-sm font-medium">
+                    Select Classes
+                  </label>
                   <Select
                     isMulti
                     options={classOptions}
@@ -1162,7 +1302,7 @@ const AllStudents = () => {
                         ...base,
                         padding: "0.1rem",
                         fontSize: "0.875rem",
-                        borderColor: "black"
+                        borderColor: "black",
                       }),
                       menu: (base) => ({
                         ...base,
@@ -1172,7 +1312,9 @@ const AllStudents = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">Select Sections</label>
+                  <label className="block text-sm font-medium">
+                    Select Sections
+                  </label>
                   <Select
                     isMulti
                     options={sectionOptions}
@@ -1186,7 +1328,7 @@ const AllStudents = () => {
                         ...base,
                         padding: "0.1rem",
                         fontSize: "0.875rem",
-                        borderColor: "black"
+                        borderColor: "black",
                       }),
                       menu: (base) => ({
                         ...base,
@@ -1223,9 +1365,15 @@ const AllStudents = () => {
                 ref={attendanceRef}
               >
                 <div className="text-center mb-6">
-                  <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
+                  <img
+                    src={logo}
+                    alt="IQ Nexus"
+                    className="mx-auto h-12 mb-2"
+                  />
                   <h1 className="text-lg font-semibold uppercase">
-                    {selectedExam ? `${examFullNames[selectedExam].fullName} ${examFullNames[selectedExam].level}` : "Exam Not Selected"}
+                    {selectedExam
+                      ? `${examFullNames[selectedExam].fullName} ${examFullNames[selectedExam].level}`
+                      : "Exam Not Selected"}
                   </h1>
                   <h2 className="font-bold uppercase underline mt-2">
                     Attendance List
@@ -1251,7 +1399,8 @@ const AllStudents = () => {
                       <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
                     </p>
                     <p>
-                      <strong>Print Date:</strong> {new Date().toLocaleDateString()}
+                      <strong>Print Date:</strong>{" "}
+                      {new Date().toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -1274,11 +1423,19 @@ const AllStudents = () => {
                         <tr key={student._id || index}>
                           <td className="border px-2 py-1">{index + 1}</td>
                           <td className="border px-2 py-1">{student.rollNo}</td>
-                          <td className="border px-2 py-1">{student.studentName}</td>
-                          <td className="border px-2 py-1">{student.fatherName || ""}</td>
-                          <td className="border px-2 py-1">{student.motherName || ""}</td>
+                          <td className="border px-2 py-1">
+                            {student.studentName}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {student.fatherName || ""}
+                          </td>
+                          <td className="border px-2 py-1">
+                            {student.motherName || ""}
+                          </td>
                           <td className="border px-2 py-1">{student.class}</td>
-                          <td className="border px-2 py-1">{student.section}</td>
+                          <td className="border px-2 py-1">
+                            {student.section}
+                          </td>
                           <td className="border px-2 py-1">
                             {/* {student[selectedExam] === "1" ? "P" : "A"} */}
                           </td>
@@ -1306,7 +1463,8 @@ const AllStudents = () => {
                   </div>
                   <div>
                     <p>
-                      <strong>Information Filled By:</strong> ______________________
+                      <strong>Information Filled By:</strong>{" "}
+                      ______________________
                     </p>
                     <p>
                       <strong>Mobile No:</strong> ____________________
@@ -1317,11 +1475,12 @@ const AllStudents = () => {
                   </div>
                 </div>
                 <div className="text-xs border-t pt-2 mt-2">
-                  <strong>IMPORTANT NOTE:</strong> Please note that we shall print
-                  certificates as per the above details. So this is very important
-                  to check the spelling and correct if found wrong. So ask every
-                  participant to cross check their details and then sign on it. We
-                  will not re-print the certificate(s) after that.
+                  <strong>IMPORTANT NOTE:</strong> Please note that we shall
+                  print certificates as per the above details. So this is very
+                  important to check the spelling and correct if found wrong. So
+                  ask every participant to cross check their details and then
+                  sign on it. We will not re-print the certificate(s) after
+                  that.
                 </div>
                 <div className="mt-2"></div>
               </div>

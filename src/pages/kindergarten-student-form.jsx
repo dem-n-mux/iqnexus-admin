@@ -443,16 +443,16 @@ const KinderGartenStudentForm = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {inputField({ label: "Total Basic Level Participated Exams", name: "totalBasicLevelParticipatedExams" })}
-                {inputField({ label: "Advance Level Amount Paid", name: "advanceLevelAmountPaid" })}
-                {inputField({ label: "Advance Level Amount Paid Online", name: "advanceLevelAmountPaidOnline" })}
-                {inputField({ label: "Total Amount Paid", name: "totalAmountPaid" })}
-                {inputField({ label: "Total Amount Paid Online", name: "totalAmountPaidOnline" })}
-                {inputField({ label: "Basic Level Full Amount", name: "basicLevelFullAmount" })}
+                 {inputField({ label: "Basic Level Full Amount", name: "basicLevelFullAmount" })}
                 {inputField({ label: "Basic Level Amount Paid", name: "basicLevelAmountPaid" })}
                 {inputField({ label: "Basic Level Amount Paid Online", name: "basicLevelAmountPaidOnline" })}
                 {inputField({ label: "Is Basic Level Concession Given", name: "isBasicLevelConcessionGiven" })}
                 {inputField({ label: "Concession Reason", name: "concessionReason" })}
-                {inputField({ label: "Remark", name: "remark" })}
+                 {inputField({ label: "Remark", name: "remark" })}
+                {inputField({ label: "Advance Level Amount Paid", name: "advanceLevelAmountPaid" })}
+                {inputField({ label: "Advance Level Amount Paid Online", name: "advanceLevelAmountPaidOnline" })}
+                {inputField({ label: "Total Amount Paid", name: "totalAmountPaid" })}
+                {inputField({ label: "Total Amount Paid Online", name: "totalAmountPaidOnline" })}                                    
               </div>
             </div>
 

@@ -144,6 +144,19 @@ const AllKindergartenStudents = () => {
                 "Mother Name": student.motherName || "N/A",
                 "City": student.city || "N/A",
                 "IQKG": student.IQKG === "1" ? "Yes" : "No",
+                "Total Basic Level Participated Exams": student.totalBasicLevelParticipatedExams,
+                "Basic Level Full Amount": student.basicLevelFullAmount,
+                "Basic Level Paid Amount": student.basicLevelAmountPaid,
+                "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
+                "Is Basic Level Concession Given": student.isBasicLevelConcessionGiven,
+                "Concession Reason": student.concessionReason,
+                "Parents Working School": student.ParentsWorkingschool,
+                "Designation": student.designation,
+                "Advance Level Paid Amount": student.advanceLevelAmountPaid,
+                "Advance Level Amount Paid Online": student.advanceLevelAmountPaidOnline,
+                "Total Amount Paid": student.totalAmountPaid,
+                "Total Amount Paid Online": student.totalAmountPaidOnline
+
             }));
 
             // Create worksheet
