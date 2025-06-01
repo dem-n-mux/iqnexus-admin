@@ -405,8 +405,12 @@ const AllStudents = () => {
       }${selectedSchoolCode ? `_${selectedSchoolCode}` : ""}.pdf`;
 
       // Save PDF
-      pdf.save(filename);
-      alert("Attendance downloaded successfully!!");
+      // pdf.save(filename);
+      // alert("Attendance downloaded successfully!!");
+      const pdfBlob = pdf.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      window.open(blobUrl, '_blank');
+
     } catch (err) {
       console.error("PDF generation failed:", err);
       alert("Failed to generate PDF. Check console for details.");
