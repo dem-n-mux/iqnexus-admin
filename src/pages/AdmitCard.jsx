@@ -20,22 +20,50 @@ const AdmitCard = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [message, setMessage] = useState("");
 
-  const [schools, setSchools] = useState([])
+  const [schools, setSchools] = useState([]);
 
   useEffect(() => {
     const fetchSchool = async () => {
       const res = await axios.get(`${BASE_URL}/all-school-admit-card`);
       setSchools(res.data.schools);
-    }
+    };
     fetchSchool();
   }, []);
-
 
   // const sessionOptions = [
   //   { value: "2024-25", label: "2024-25" },
   //   { value: "2025-26", label: "2025-26" },
   //   { value: "2026-27", label: "2026-27" },
   // ];
+  const fetchSchoolsByLevel = async () => {
+    if (!searchData.examLevel) {
+      setSchools([]);
+      setSearchData((prev) => ({ ...prev, schoolCode: "" }));
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${BASE_URL}/all-schools`, {
+        examLevel: searchData.examLevel,
+      });
+      if (res.data && res.data.schools) {
+        setSchools(res.data.schools);
+        setSearchData((prev) => ({ ...prev, schoolCode: "" }));
+      } else {
+        setSchools([]);
+        setSearchData((prev) => ({ ...prev, schoolCode: "" }));
+      }
+    } catch (error) {
+      console.error("Error fetching schools:", error);
+      setSchools([]);
+      setSearchData((prev) => ({ ...prev, schoolCode: "" }));
+    }
+  };
+
+  // ✅ useEffect to call fetchSchoolsByLevel on examLevel change
+  useEffect(() => {
+    fetchSchoolsByLevel();
+  }, [searchData.examLevel]);
 
   const fetchStudents = async (page, filters = {}) => {
     try {
@@ -54,7 +82,9 @@ const AdmitCard = () => {
       const res = await axios.post(
         `${BASE_URL}/admit-card-students?page=${page}&limit=${limit}`,
         {
-          schoolCode: filters.schoolCode ? Number(filters.schoolCode) : undefined,
+          schoolCode: filters.schoolCode
+            ? Number(filters.schoolCode)
+            : undefined,
           examLevel: filters.examLevel || undefined,
           // session: filters.session || undefined,
         }
@@ -211,7 +241,9 @@ const AdmitCard = () => {
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Generate Admit Card</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Generate Admit Card
+          </h1>
         </div>
 
         <div className="bg-white shadow-md rounded-lg p-4 mb-6 transition-all duration-300">
@@ -234,52 +266,6 @@ const AdmitCard = () => {
                 <option value="L2">Advance</option>
               </select>
             </div>
-            {/* <div className="flex-1 min-w-[150px]">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Session
-              </label>
-              <Select
-                name="session"
-                options={sessionOptions}
-                value={sessionOptions.find((opt) => opt.value === searchData.session)}
-                onChange={handleSessionChange}
-                className="basic-single-select"
-                classNamePrefix="select"
-                placeholder="Select session..."
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    paddingTop: "0.375rem",
-                    paddingBottom: "0.375rem",
-                    paddingLeft: "0.75rem",
-                    paddingRight: "0.75rem",
-                    borderRadius: "0.375rem",
-                    borderColor: "#d1d5db",
-                    fontSize: "0.875rem",
-                    lineHeight: "1.25rem",
-                    height: "2rem",
-                    "&:hover": { borderColor: "#6366f1" },
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    zIndex: 50,
-                  }),
-                }}
-              />
-            </div> */}
-            {/* <div className="flex-1 min-w-[120px]">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                School Code
-              </label>
-              <input
-                type="number"
-                name="schoolCode"
-                value={searchData.schoolCode}
-                onChange={handleSearchChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
-                placeholder="141"
-              />
-            </div> */}
 
             <div className="flex-1 min-w-[120px]">
               <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -323,10 +309,11 @@ const AdmitCard = () => {
 
         {message && (
           <div
-            className={`mt-4 p-4 rounded-md text-sm ${message.includes("Failed")
-              ? "bg-red-100 text-red-700"
-              : "bg-green-100 text-green-700"
-              }`}
+            className={`mt-4 p-4 rounded-md text-sm ${
+              message.includes("Failed")
+                ? "bg-red-100 text-red-700"
+                : "bg-green-100 text-green-700"
+            }`}
           >
             {message}
           </div>
@@ -395,7 +382,9 @@ const AdmitCard = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-gray-600">{stu.dob || "N/A"}</span>
+                        <span className="text-gray-600">
+                          {stu.dob || "N/A"}
+                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -418,7 +407,9 @@ const AdmitCard = () => {
                       colSpan="5"
                       className="px-6 py-4 text-center text-gray-500"
                     >
-                      {noStudentsFound ? "No students found" : "Loading students..."}
+                      {noStudentsFound
+                        ? "No students found"
+                        : "Loading students..."}
                     </td>
                   </tr>
                 )
@@ -461,10 +452,11 @@ const AdmitCard = () => {
                       <button
                         key={idx}
                         onClick={() => handlePageChange(item)}
-                        className={`px-3 py-1 rounded-md ${currentPage === item
-                          ? "bg-indigo-600 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === item
+                            ? "bg-indigo-600 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
                       >
                         {item}
                       </button>
