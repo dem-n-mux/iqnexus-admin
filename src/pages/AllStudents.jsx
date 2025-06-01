@@ -453,7 +453,6 @@ const AllStudents = () => {
     }
   };
 
-
   // Handle Excel download
   const handleDownloadExcel = async () => {
     const allStudents = await fetchAllStudentsForExcel(searchData);
@@ -463,88 +462,60 @@ const AllStudents = () => {
     }
 
     try {
+      const subjectNameMap = {
+        IMOL: "IQMO",
+        ITSTL: "IQSO",
+        IENGOL: "IQEO",
+        IAOL: "IQRO",
+        IGKOL: "IQGKO",
+      };
+
       // Prepare data for Excel
-      // const excelData = allStudents.map((student, index) => ({
-      //   "S.No": index + 1,
-      //   "Student Name": student.studentName || "N/A",
-      //   "DOB": student.dob || "N/A",
-      //   "Roll No": student.rollNo || "N/A",
-      //   "Mobile": student.mobNo || "N/A",
-      //   "School Code": student.schoolCode || "N/A",
-      //   "Class": student.class || "N/A",
-      //   "Section": student.section || "N/A",
-      //   "Father Name": student.fatherName || "N/A",
-      //   "Mother Name": student.motherName || "N/A",
-      //   ...booleanFields.reduce((acc, field) => ({
-      //     ...acc,
-      //     [field]: student[field] === "1" || student[field] === true ? "Yes" : "No",
-      //   }), {}),
-      //     "Total Basic Level Participated Exams": student.totalBasicLevelParticipatedExams,
-      //           "Basic Level Full Amount": student.basicLevelFullAmount,
-      //           "Basic Level Paid Amount": student.basicLevelAmountPaid,
-      //           "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
-      //           "Is Basic Level Concession Given": student.isBasicLevelConcessionGiven,
-      //           "Concession Reason": student.concessionReason,
-      //           "Parents Working School": student.ParentsWorkingschool,
-      //           "Designation": student.designation,
-      //           "City": student.city || "N/A",
-      //           "Advance Level Paid Amount": student.advanceLevelAmountPaid,
-      //           "Advance Level Amount Paid Online": student.advanceLevelAmountPaidOnline,
-      //           "Total Amount Paid": student.totalAmountPaid,
-      //           "Total Amount Paid Online": student.totalAmountPaidOnline
-      // }));
+      const excelData = allStudents.map((student, index) => {
+        const booleanMappedFields = booleanFields.reduce((acc, field) => {
+          // Replace subject codes with mapped labels in the Excel column name
+          let replacedField = field;
+          Object.entries(subjectNameMap).forEach(([code, label]) => {
+            if (field.includes(code)) {
+              replacedField = field.replace(code, label);
+            }
+          });
 
-       const subjectNameMap = {
-    IMOL: "IQMO",
-    ITSTL: "IQSO",
-    IENGOL: "IQEO",
-    IAOL: "IQRO",
-    IGKOL: "IQGKO",
-  };
+          acc[replacedField] =
+            student[field] === "1" || student[field] === true ? "Yes" : "No";
+          return acc;
+        }, {});
 
-  // Prepare data for Excel
-  const excelData = allStudents.map((student, index) => {
-    const booleanMappedFields = booleanFields.reduce((acc, field) => {
-      // Replace subject codes with mapped labels in the Excel column name
-      let replacedField = field;
-      Object.entries(subjectNameMap).forEach(([code, label]) => {
-        if (field.includes(code)) {
-          replacedField = field.replace(code, label);
-        }
+        return {
+          "S.No": index + 1,
+          "Student Name": student.studentName || "N/A",
+          DOB: student.dob || "N/A",
+          "Roll No": student.rollNo || "N/A",
+          Mobile: student.mobNo || "N/A",
+          "School Code": student.schoolCode || "N/A",
+          Class: student.class || "N/A",
+          Section: student.section || "N/A",
+          "Father Name": student.fatherName || "N/A",
+          "Mother Name": student.motherName || "N/A",
+          ...booleanMappedFields,
+          "Total Basic Level Participated Exams":
+            student.totalBasicLevelParticipatedExams,
+          "Basic Level Full Amount": student.basicLevelFullAmount,
+          "Basic Level Paid Amount": student.basicLevelAmountPaid,
+          "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
+          "Is Basic Level Concession Given":
+            student.isBasicLevelConcessionGiven,
+          "Concession Reason": student.concessionReason,
+          "Parents Working School": student.ParentsWorkingschool,
+          Designation: student.designation,
+          City: student.city || "N/A",
+          "Advance Level Paid Amount": student.advanceLevelAmountPaid,
+          "Advance Level Amount Paid Online":
+            student.advanceLevelAmountPaidOnline,
+          "Total Amount Paid": student.totalAmountPaid,
+          "Total Amount Paid Online": student.totalAmountPaidOnline,
+        };
       });
-
-      acc[replacedField] = student[field] === "1" || student[field] === true ? "Yes" : "No";
-      return acc;
-    }, {});
-
-    return {
-      "S.No": index + 1,
-      "Student Name": student.studentName || "N/A",
-      "DOB": student.dob || "N/A",
-      "Roll No": student.rollNo || "N/A",
-      "Mobile": student.mobNo || "N/A",
-      "School Code": student.schoolCode || "N/A",
-      "Class": student.class || "N/A",
-      "Section": student.section || "N/A",
-      "Father Name": student.fatherName || "N/A",
-      "Mother Name": student.motherName || "N/A",
-      ...booleanMappedFields,
-      "Total Basic Level Participated Exams": student.totalBasicLevelParticipatedExams,
-      "Basic Level Full Amount": student.basicLevelFullAmount,
-      "Basic Level Paid Amount": student.basicLevelAmountPaid,
-      "Basic Level Amount Paid Online": student.basicLevelAmountPaidOnline,
-      "Is Basic Level Concession Given": student.isBasicLevelConcessionGiven,
-      "Concession Reason": student.concessionReason,
-      "Parents Working School": student.ParentsWorkingschool,
-      "Designation": student.designation,
-      "City": student.city || "N/A",
-      "Advance Level Paid Amount": student.advanceLevelAmountPaid,
-      "Advance Level Amount Paid Online": student.advanceLevelAmountPaidOnline,
-      "Total Amount Paid": student.totalAmountPaid,
-      "Total Amount Paid Online": student.totalAmountPaidOnline
-    };
-  });
-
 
       // Create worksheet
       const ws = XLSX.utils.json_to_sheet(excelData);
@@ -950,11 +921,14 @@ const AllStudents = () => {
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
                 >
                   <option value="">Select Subject</option>
-                  <option value="IAO">IAO</option>
-                  <option value="ITST">ITST</option>
-                  <option value="IMO">IMO</option>
-                  <option value="IGKO">IGKO</option>
+                  <option value="IAO">IQRO</option>
+                  <option value="ITST">IQSO</option>
+                  <option value="IMO">IQMO</option>
+                  <option value="IGKO">IQGKO</option>
+                  <option value="IENGO">IQEO</option>
                 </select>
+
+      
               </div>
               <div className="flex gap-2">
                 <button

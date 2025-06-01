@@ -1,3 +1,3 @@
-S.No,Student Name,DOB,Roll No,Mobile,School Code,Class,Section,Father Name,Mother Name,City,IQKG1,IQKG2,Total Basic Level Participated Exams,Basic Level Full Amount,Basic Level Paid Amount,Basic Level Amount Paid Online,Is Basic Level Concession Given,Concession Reason,Parents Working School,Designation,Duplicates,Advance Level Paid Amount,Advance Level Amount Paid Online,Total Amount Paid,Total Amount Paid Online
-1,Dinesh,2025-05-13,1234567,8768748763,180,KG,LKG,Rahul,Anita,Jaipur,Yes,No,2,300,200,100,Yes,Financial hardship,ABC School,Teacher,false,200,100,300,150
-2,Rahul,2025-05-16,2142355,9230934755,180,KG,PG,Dinesh,Rekha,Bharatpur,Yes,Yes,2,400,250,150,No,,,,false,250,150,400,200
+S.No,Roll No,School Code,Class,Section,Student Name,Father Name,Mother Name,DOB,Mob No,IQKD Book,Total Basic Level Participated Exams,Basic Level Full Amount,Basic Level Paid Amount,Is Basic Level Concession Given,Concession Reason,Parents Working School,Designation,City,Advance Level Paid Amount,Advance Level Amount Paid Online,Total Amount Paid
+1,1234567,180,KD,LK,Dinesh,Rahul,Anita,2025-05-13,8768748763,Yes,2,300,200,Yes,Financial hardship,ABC School,Teacher,Jaipur,200,100,300
+2,2142355,180,KD,PG,Rahul,Dinesh,Rekha,2025-05-16,9230934755,Yes,2,400,250,No,, , ,Bharatpur,250,150,400

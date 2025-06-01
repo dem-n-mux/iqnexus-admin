@@ -224,7 +224,7 @@ const AllKindergartenStudents = () => {
         if (window.confirm("Are you sure you want to delete this student?")) {
             try {
                 const res = await axios.delete(`${BASE_URL}/kindergarten-student`, {
-                    data: { rollNo, class: "KG" },
+                    data: { rollNo, class: "KD" },
                 });
                 alert(res.data.message);
                 fetchStudents(currentPage, searchData);
