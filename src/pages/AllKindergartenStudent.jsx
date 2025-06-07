@@ -58,6 +58,7 @@ const AllKindergartenStudents = () => {
                         IQKG: filters.IQKG || undefined,
                     }
                 );
+                console.log("Filtered students response:", res.data);
             } else {
                 res = await axios.get(
                     `${BASE_URL}/all-kindergarten-students?page=${page}&limit=${limit}`

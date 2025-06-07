@@ -83,6 +83,7 @@ const examFullNames = {
 
 const AllStudents = () => {
   const [students, setStudents] = useState([]);
+  const[isFilterApplied, setIsFilterApplied] = useState(false);
   const [searched, setSearched] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -100,6 +101,7 @@ const AllStudents = () => {
     rollNo: "",
     sections: [],
     subject: "",
+    totalPages:null
   });
 
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
@@ -573,30 +575,38 @@ const AllStudents = () => {
     fetchStudents(currentPage);
   }, [currentPage]);
 
+  useEffect(()=>{
+if(searchData.totalPages){
+    console.log("Search data before change:", searchData.totalPages);
+fetchStudents(1, searchData);
+}
+  },[searchData])
   const fetchStudents = async (page, filters = {}) => {
     try {
       let res;
-      const hasFilters = Object.values(filters).some(
+      const hasFilters = Object.values(searchData).some(
         (val) =>
           (Array.isArray(val) ? val.length > 0 : val !== "" && val !== null) &&
           val !== undefined
       );
-
+        console.log("Fetching students with filters:", hasFilters);
       if (hasFilters) {
+
         res = await axios.post(
-          `${BASE_URL}/students?page=${page}&limit=${limit}`,
+          `${BASE_URL}/students?page=${page}&limit=${searchData.totalPages || limit}`,
           {
-            schoolCode: filters.schoolCode
-              ? Number(filters.schoolCode)
+            schoolCode: searchData.schoolCode
+              ? Number(searchData.schoolCode)
               : undefined,
-            className: filters.classes.length > 0 ? filters.classes : undefined,
-            rollNo: filters.rollNo,
-            section: filters.sections.length > 0 ? filters.sections : undefined,
-            studentName: filters.studentName,
-            subject: filters.subject,
+            className: searchData.classes.length > 0 ? searchData.classes : undefined,
+            rollNo: searchData.rollNo,
+            section: searchData.sections.length > 0 ? searchData.sections : undefined,
+            studentName: searchData.studentName,
+            subject: searchData.subject,
           }
         );
       } else {
+        console.log("Fetching all students without filters");
         res = await axios.get(
           `${BASE_URL}/all-students?page=${page}&limit=${limit}`
         );
@@ -624,6 +634,7 @@ const AllStudents = () => {
   };
 
   const handleSearchChange = (e) => {
+  
     setSearchData({ ...searchData, [e.target.name]: e.target.value });
   };
 
@@ -642,6 +653,8 @@ const AllStudents = () => {
   };
 
   const handleSearchSubmit = async (e) => {
+
+   setIsFilterApplied(true)
     e.preventDefault();
     setCurrentPage(1);
     await fetchStudents(1, searchData);
@@ -655,6 +668,7 @@ const AllStudents = () => {
       rollNo: "",
       sections: [],
       subject: "",
+      totalPages: null,
     });
     setSearched(false);
     setCurrentPage(1);
@@ -930,6 +944,26 @@ const AllStudents = () => {
                   <option value="IMO">IQMO</option>
                   <option value="IGKO">IQGKO</option>
                   <option value="IENGO">IQEO</option>
+                </select>
+
+      
+              </div>
+                            <div className="flex-1 min-w-[150px]">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Select Total Pages
+                </label>
+                <select
+                  name="totalPages"
+                  value={searchData.totalPages}
+                  onChange={handleSearchChange}
+                  className="w-40 px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:outline-none text-sm transition duration-150"
+                >
+                  <option value="">Select Pages</option>
+                  <option value="5">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+           
                 </select>
 
       
