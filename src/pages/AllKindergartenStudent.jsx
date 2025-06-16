@@ -37,6 +37,8 @@ const AllKindergartenStudents = () => {
         { value: "0", label: "No" },
     ];
 
+
+
     // Fetch kindergarten students
     const fetchStudents = async (page, filters = {}) => {
         try {
@@ -48,6 +50,7 @@ const AllKindergartenStudents = () => {
             );
 
             if (hasFilters) {
+                console.log("Fetching with filters:", filters);
                 res = await axios.post(
                     `${BASE_URL}/kindergarten-students?page=${page}&limit=${limit}`,
                     {
@@ -58,6 +61,7 @@ const AllKindergartenStudents = () => {
                         IQKG: filters.IQKG || undefined,
                     }
                 );
+                console.log("Response with filters:", res.data);
             } else {
                 res = await axios.get(
                     `${BASE_URL}/all-kindergarten-students?page=${page}&limit=${limit}`

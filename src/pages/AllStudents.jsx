@@ -90,7 +90,7 @@ const AllStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalStudents, setTotalStudents] = useState(0);
-  const [limit] = useState(10);
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [noStudentsFound, setNoStudentsFound] = useState(false);
   const [searchData, setSearchData] = useState({
@@ -99,9 +99,10 @@ const AllStudents = () => {
     schoolCode: null,
     rollNo: "",
     sections: [],
+    pages:"",
     subject: "",
   });
-
+  const [limit] = useState(10);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
   const [selectedExamLevel, setSelectedExamLevel] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
@@ -207,6 +208,7 @@ const AllStudents = () => {
           node.style.fontFamily = "Arial, sans-serif";
           node.style.fontSize = "12px";
           node.style.lineHeight = "1.5";
+          
 
           // Center content
           if (node.tagName === "H1" || node.tagName === "H2") {
@@ -569,14 +571,22 @@ const AllStudents = () => {
     { value: "E", label: "Section E" },
   ];
 
+  const dropdown = [
+    { value: "10", label: "10 dataset" },
+    { value: "25", label: "25 dataset" },
+    { value: "50", label: "50 dataset" },
+  ]
+
   useEffect(() => {
     fetchStudents(currentPage);
   }, [currentPage]);
 
+  const [pages, setPages] = useState(10);
+
   const fetchStudents = async (page, filters = {}) => {
     try {
       let res;
-      const hasFilters = Object.values(filters).some(
+      const hasFilters = Object.values(searchData).some(
         (val) =>
           (Array.isArray(val) ? val.length > 0 : val !== "" && val !== null) &&
           val !== undefined
@@ -584,16 +594,16 @@ const AllStudents = () => {
 
       if (hasFilters) {
         res = await axios.post(
-          `${BASE_URL}/students?page=${page}&limit=${limit}`,
+          `${BASE_URL}/students?page=${page}&limit=${pages || 10}`,
           {
-            schoolCode: filters.schoolCode
-              ? Number(filters.schoolCode)
+            schoolCode: searchData.schoolCode
+              ? Number(searchData.schoolCode)
               : undefined,
-            className: filters.classes.length > 0 ? filters.classes : undefined,
-            rollNo: filters.rollNo,
-            section: filters.sections.length > 0 ? filters.sections : undefined,
-            studentName: filters.studentName,
-            subject: filters.subject,
+            className: searchData.classes.length > 0 ? searchData.classes : undefined,
+            rollNo: searchData.rollNo,
+            section: searchData.sections.length > 0 ? searchData.sections : undefined,
+            studentName: searchData.studentName,
+            subject: searchData.subject,
           }
         );
       } else {
@@ -901,6 +911,38 @@ const AllStudents = () => {
                   }}
                 />
               </div>
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  DataEntry
+                </label>
+                <Select
+                  isMulti
+                  name="dropdown"
+                  options={dropdown}
+                  value={dropdown.filter((opt) => opt.value === pages) || null}
+  onChange={(selectedOption) => {
+    setPages(selectedOption?.value || null);
+  }}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  placeholder="Select sections..."
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      padding: "0.1rem",
+                      borderRadius: "0.375rem",
+                      borderColor: "#d1d5db",
+                      fontSize: "0.875rem",
+                      "&:hover": { borderColor: "#6366f1" },
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      zIndex: 50,
+                    }),
+                  }}
+                />
+              </div>
+              
               <div className="flex-1 min-w-[120px]">
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   School Code
