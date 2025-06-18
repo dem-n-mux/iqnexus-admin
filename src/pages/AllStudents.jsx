@@ -116,7 +116,7 @@ const AllStudents = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
-
+  const [pages, setPages] = useState(10);
   const attendanceRef = useRef(null);
 
   const exams = [
