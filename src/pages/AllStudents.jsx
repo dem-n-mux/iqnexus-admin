@@ -583,17 +583,12 @@ const AllStudents = () => {
     fetchStudents(currentPage);
   }, [currentPage]);
 
-<<<<<<< HEAD
-  const [pages, setPages] = useState(10);
-
-=======
   useEffect(()=>{
 if(searchData.totalPages){
     console.log("Search data before change:", searchData.totalPages);
 fetchStudents(1, searchData);
 }
   },[searchData])
->>>>>>> refs/remotes/origin/main
   const fetchStudents = async (page, filters = {}) => {
     try {
       let res;
@@ -606,11 +601,7 @@ fetchStudents(1, searchData);
       if (hasFilters) {
 
         res = await axios.post(
-<<<<<<< HEAD
-          `${BASE_URL}/students?page=${page}&limit=${pages || 10}`,
-=======
           `${BASE_URL}/students?page=${page}&limit=${searchData.totalPages || limit}`,
->>>>>>> refs/remotes/origin/main
           {
             schoolCode: searchData.schoolCode
               ? Number(searchData.schoolCode)
