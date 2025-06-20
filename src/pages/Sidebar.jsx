@@ -150,46 +150,54 @@ const Sidebar = () => {
 
             {/* Participation List Dropdown */}
             <MenuItem
-  icon={<ClipboardList size={20} />}
-  text="Participation List"
-  href="#"
-  active={location.pathname.startsWith("/participation")}
-  onClick={(e) => {
-    e.preventDefault();
-    toggleParticipation();
-  }}
-  isDropdown={true}
-  isOpen={participationOpen}
->
-  {participationOpen && (
-    <div className="bg-[#003B87] pl-6"> {/* Match sidebar background color */}
-      <MenuItem
-        text="Olympiad 1"
-        href="/participation/olympiad1"
-        active={location.pathname === "/participation/olympiad1"}
-        onClick={closeSidebar}
-      />
-      <MenuItem
-        text="Olympiad 2"
-        href="/participation/olympiad2"
-        active={location.pathname === "/participation/olympiad2"}
-        onClick={closeSidebar}
-      />
-      <MenuItem
-        text="Olympiad 3"
-        href="/participation/olympiad3"
-        active={location.pathname === "/participation/olympiad3"}
-        onClick={closeSidebar}
-      />
-      <MenuItem
-        text="Olympiad 4"
-        href="/participation/olympiad4"
-        active={location.pathname === "/participation/olympiad4"}
-        onClick={closeSidebar}
-      />
-    </div>
-  )}
-</MenuItem>
+              icon={<ClipboardList size={20} />}
+              text="Participation List"
+              href="#"
+              active={location.pathname.startsWith("/participation")}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleParticipation();
+              }}
+              isDropdown={true}
+              isOpen={participationOpen}
+            >
+              {participationOpen && (
+                <div className="bg-[#003B87] pl-6"> {/* Match sidebar background color */}
+                  <MenuItem
+                    text="School-wise Participation"
+                    href="/participation/olympiad1"
+                    active={location.pathname === "/participation/olympiad1"}
+                    onClick={closeSidebar}
+                  />
+                  <MenuItem
+                    text="Section-wise Participation"
+                    href="/participation/olympiad2"
+                    active={location.pathname === "/participation/olympiad2"}
+                    onClick={closeSidebar}
+                  />
+                  <MenuItem
+                    text="Class-wise Participation"
+                    href="/participation/olympiad3"
+                    active={location.pathname === "/participation/olympiad3"}
+                    onClick={closeSidebar}
+                  />
+                  <MenuItem
+                    text="Amount-wise Participation"
+                    href="/participation/olympiad4"
+                    active={location.pathname === "/participation/olympiad4"}
+                    onClick={closeSidebar}
+                  />
+                </div>
+              )}
+            </MenuItem>
+
+            <MenuItem
+              icon={<FileUp size={20} />}
+              text="Study Material"
+              href="/StudyMaterial"
+              active={location.pathname === "/StudyMaterial"}
+              onClick={closeSidebar}
+            />
 
             {/* KG Students Section */}
             <MenuItem
