@@ -87,11 +87,11 @@ const StudyMaterial = () => {
                         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">Select Subject</option>
-                        <option value="math">IQRO</option>
-                        <option value="science">IQSO</option>
-                        <option value="english">IQMO</option>
-                        <option value="history">IQGKO</option>
-                        <option value="history">IQEO</option>
+                        <option value="IQRO">IQRO</option>
+                        <option value="IQSO">IQSO</option>
+                        <option value="IQMO">IQMO</option>
+                        <option value="IQGKO">IQGKO</option>
+                        <option value="IQEO">IQEO</option>
                     </select>
                 </div>
                 <div>
