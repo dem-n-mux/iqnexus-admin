@@ -165,26 +165,26 @@ const Sidebar = () => {
                 <div className="bg-[#003B87] pl-6"> {/* Match sidebar background color */}
                   <MenuItem
                     text="School-wise Participation"
-                    href="/participation/olympiad1"
-                    active={location.pathname === "/participation/olympiad1"}
+                    href="/School-wise"
+                    active={location.pathname === "/School-wise"}
                     onClick={closeSidebar}
                   />
                   <MenuItem
                     text="Section-wise Participation"
-                    href="/participation/olympiad2"
-                    active={location.pathname === "/participation/olympiad2"}
+                    href="/Section-wise"
+                    active={location.pathname === "/Section-wise"}
                     onClick={closeSidebar}
                   />
                   <MenuItem
                     text="Class-wise Participation"
-                    href="/participation/olympiad3"
-                    active={location.pathname === "/participation/olympiad3"}
+                    href="/Class-wise"
+                    active={location.pathname === "/Class-wise"}
                     onClick={closeSidebar}
                   />
                   <MenuItem
-                    text="Amount-wise Participation"
-                    href="/participation/olympiad4"
-                    active={location.pathname === "/participation/olympiad4"}
+                    text="Cost-wise Participation"
+                    href="/Cost-wise"
+                    active={location.pathname === "/Cost-wise"}
                     onClick={closeSidebar}
                   />
                 </div>

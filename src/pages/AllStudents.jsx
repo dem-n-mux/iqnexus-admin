@@ -129,7 +129,7 @@ const AllStudents = () => {
     { name: "IQMOL1", level: "L1" },
     { name: "IQMOL2", level: "L2" },
     { name: "IQGKOL1", level: "L1" },
-    { name: "IQGKOL2", level: "L2" },
+    // { name: "IQGKOL2", level: "L2" },
   ];
 
   // Fetch the student data based on filters

@@ -10,6 +10,7 @@ import UpdateStudent from "./pages/UpdateStudent";
 import AllSchools from "./pages/AllSchools";
 import AllStudents from "./pages/AllStudents";
 import LoginPage from "./pages/LoginPage";
+import SchoolPartList from "./pages/SchoolPartList";
 import AdmitCard from "./pages/AdmitCard"
 import KinderGartenStudentForm from "./pages/kindergarten-student-form"
 import AllKindergartenStudents from "./pages/AllKindergartenStudent"
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/singleStudent" element={<SingleStudentForm />} />
             <Route path="/singleSchool" element={<SingleSchoolForm />} />
             {/* <Route path="/updateStudent" element={< UpdateStudent />} /> */}
+            <Route path="/School-wise" element={<SchoolPartList />} />
             <Route path="/StudyMaterial" element={<StudyMaterial />} />
             <Route path="/allSchools" element={< AllSchools />} />
             <Route path="/allStudents" element={< AllStudents />} />
