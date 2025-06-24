@@ -83,7 +83,7 @@ const examFullNames = {
 
 const SchoolPartList = () => {
   const [students, setStudents] = useState([]);
-  const[isFilterApplied, setIsFilterApplied] = useState(false);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [searched, setSearched] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -91,7 +91,7 @@ const SchoolPartList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalStudents, setTotalStudents] = useState(0);
-
+  const [examListPlainArray, setExamListPlainArray] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [noStudentsFound, setNoStudentsFound] = useState(false);
   const [searchData, setSearchData] = useState({
@@ -100,9 +100,9 @@ const SchoolPartList = () => {
     schoolCode: null,
     rollNo: "",
     sections: [],
-    pages:"",
+    pages: "",
     subject: "",
-    totalPages:null
+    totalPages: null,
   });
   const [limit] = useState(10);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
@@ -118,7 +118,7 @@ const SchoolPartList = () => {
   const [isFetched, setIsFetched] = useState(false);
   const [pages, setPages] = useState(10);
   const attendanceRef = useRef(null);
-
+  console.log("selected exam", selectedExam);
   const exams = [
     { name: "IQEOL1", level: "L1" },
     { name: "IQEOL2", level: "L2" },
@@ -132,13 +132,34 @@ const SchoolPartList = () => {
     // { name: "IQGKOL2", level: "L2" },
   ];
 
+  useEffect(() => {
+    // Flatten the exam list to a plain array
+    if(selectedExam!=''){
+    const flatExams = selectedExam.map((exam) => {
+      return exam.value
+    });
+
+    setExamListPlainArray(flatExams);
+  }
+  }, [selectedExam]);
+
+  console.log("Exam List Plain Array:", examListPlainArray);
   // Fetch the student data based on filters
   const handleFetchStudents = async () => {
-    if (!selectedExamLevel || !selectedExam || !selectedSchoolCode) {
-      alert("Please select exam level, exam, and school code!");
+    if (!selectedExamLevel) {
+      alert("Please select exam level!");
       return;
     }
-
+    let selectedExamNew = [];
+    if (selectedExamLevel === "L1" && !selectedExam) {
+      selectedExamNew = [
+        { value: "IQEOL1", level: "L1" },
+        { value: "IQROL1", level: "L1" },
+        { value: "IQSOL1", level: "L1" },
+        { value: "IQMOL1", level: "L1" },
+        { value: "IQGKOL1", level: "L1" },
+      ];
+    }
     const filters = {
       examLevel: selectedExamLevel,
       exam: selectedExam || undefined,
@@ -155,7 +176,10 @@ const SchoolPartList = () => {
 
     try {
       setIsFetching(true);
-      const res = await axios.post(`${BASE_URL}/allStudents`, filters);
+      const res = await axios.post(
+        `${BASE_URL}/participation-list-filtered`,
+        filters
+      );
       console.log("Fetched students:", res.data.student);
       if (res.data.student) {
         setStudentsData(res.data.student);
@@ -211,7 +235,6 @@ const SchoolPartList = () => {
           node.style.fontFamily = "Arial, sans-serif";
           node.style.fontSize = "12px";
           node.style.lineHeight = "1.5";
-          
 
           // Center content
           if (node.tagName === "H1" || node.tagName === "H2") {
@@ -412,10 +435,9 @@ const SchoolPartList = () => {
       // Save PDF
       // pdf.save(filename);
       // alert("Attendance downloaded successfully!!");
-      const pdfBlob = pdf.output('blob');
+      const pdfBlob = pdf.output("blob");
       const blobUrl = URL.createObjectURL(pdfBlob);
-      window.open(blobUrl, '_blank');
-
+      window.open(blobUrl, "_blank");
     } catch (err) {
       console.error("PDF generation failed:", err);
       alert("Failed to generate PDF. Check console for details.");
@@ -578,18 +600,18 @@ const SchoolPartList = () => {
     { value: "10", label: "10 dataset" },
     { value: "25", label: "25 dataset" },
     { value: "50", label: "50 dataset" },
-  ]
+  ];
 
   useEffect(() => {
     fetchStudents(currentPage);
   }, [currentPage]);
 
-  useEffect(()=>{
-if(searchData.totalPages){
-    console.log("Search data before change:", searchData.totalPages);
-fetchStudents(1, searchData);
-}
-  },[searchData])
+  useEffect(() => {
+    if (searchData.totalPages) {
+      console.log("Search data before change:", searchData.totalPages);
+      fetchStudents(1, searchData);
+    }
+  }, [searchData]);
   const fetchStudents = async (page, filters = {}) => {
     try {
       let res;
@@ -598,18 +620,21 @@ fetchStudents(1, searchData);
           (Array.isArray(val) ? val.length > 0 : val !== "" && val !== null) &&
           val !== undefined
       );
-        console.log("Fetching students with filters:", hasFilters);
+      console.log("Fetching students with filters:", hasFilters);
       if (hasFilters) {
-
         res = await axios.post(
-          `${BASE_URL}/students?page=${page}&limit=${searchData.totalPages || limit}`,
+          `${BASE_URL}/students?page=${page}&limit=${
+            searchData.totalPages || limit
+          }`,
           {
             schoolCode: searchData.schoolCode
               ? Number(searchData.schoolCode)
               : undefined,
-            className: searchData.classes.length > 0 ? searchData.classes : undefined,
+            className:
+              searchData.classes.length > 0 ? searchData.classes : undefined,
             rollNo: searchData.rollNo,
-            section: searchData.sections.length > 0 ? searchData.sections : undefined,
+            section:
+              searchData.sections.length > 0 ? searchData.sections : undefined,
             studentName: searchData.studentName,
             subject: searchData.subject,
           }
@@ -643,7 +668,6 @@ fetchStudents(1, searchData);
   };
 
   const handleSearchChange = (e) => {
-  
     setSearchData({ ...searchData, [e.target.name]: e.target.value });
   };
 
@@ -662,8 +686,7 @@ fetchStudents(1, searchData);
   };
 
   const handleSearchSubmit = async (e) => {
-
-   setIsFilterApplied(true)
+    setIsFilterApplied(true);
     e.preventDefault();
     setCurrentPage(1);
     await fetchStudents(1, searchData);
@@ -792,15 +815,13 @@ fetchStudents(1, searchData);
       {/* Attendance Modal */}
       <div>
         <div className="fixed inset-0 flex items-center justify-end mr-[130px]">
-          <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-[130vh] max-h-[90vh] overflow-y-auto">
+          <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-[80%] max-h-[95vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Basic Participation List</h2>
 
             {/* Filters Form */}
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium">
-                  Exam Level
-                </label>
+                <label className="block text-sm font-medium">Exam Level</label>
                 <select
                   className="mt-1 w-full border rounded px-3 py-2"
                   value={selectedExamLevel}
@@ -813,27 +834,37 @@ fetchStudents(1, searchData);
               </div>
               <div>
                 <label className="block text-sm font-medium">
-                  Select Exam
+                  Select Exam(s)
                 </label>
-                <select
-                  className="mt-1 w-full border rounded px-3 py-2"
-                  value={selectedExam}
-                  onChange={(e) => setSelectedExam(e.target.value)}
-                >
-                  <option value="">Select Exam</option>
-                  {exams
+                <Select
+                  isMulti
+                  options={exams
                     .filter((exam) => exam.level === selectedExamLevel)
-                    .map((exam) => (
-                      <option key={exam.name} value={exam.name}>
-                        {exam.name}
-                      </option>
-                    ))}
-                </select>
+                    .map((exam) => ({
+                      value: exam.name,
+                      label: exam.name,
+                    }))}
+                  value={selectedExam}
+                  onChange={(selected) => setSelectedExam(selected)}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  placeholder="Select exam(s)..."
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      padding: "0.1rem",
+                      fontSize: "0.875rem",
+                      borderColor: "black",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      zIndex: 50,
+                    }),
+                  }}
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium">
-                  School Code
-                </label>
+                <label className="block text-sm font-medium">School Code</label>
                 <input
                   type="number"
                   className="mt-1 w-full border rounded px-3 py-2"
@@ -895,7 +926,6 @@ fetchStudents(1, searchData);
                 />
               </div>
             </div>
-
             {/* Fetch Data Button */}
             <div className="flex justify-end mb-4">
               <button
@@ -922,17 +952,13 @@ fetchStudents(1, searchData);
               ref={attendanceRef}
             >
               <div className="text-center mb-6">
-                <img
-                  src={logo}
-                  alt="IQ Nexus"
-                  className="mx-auto h-12 mb-2"
-                />
+                <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
                 <h1 className="text-lg font-semibold uppercase">
-                  Participation List Basic 
+                  Participation List Basic
                 </h1>
                 <h2 className="font-bold uppercase underline mt-2">
                   {selectedExamLevel
-                    ? `${selectedExamLevel==="L1" ? "Basic" : "Advance"}`
+                    ? `${selectedExamLevel === "L1" ? "Basic" : "Advance"}`
                     : "Exam Level Not Selected"}
                 </h2>
               </div>
@@ -951,7 +977,7 @@ fetchStudents(1, searchData);
                     <strong>Area:</strong> {school.area || "N/A"}
                   </p>
                 </div>
-                <div>
+                <div className="ml-[60%]">
                   <p>
                     <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
                   </p>
@@ -971,16 +997,16 @@ fetchStudents(1, searchData);
                     <th className="border px-2 py-1">Mother</th>
                     <th className="border px-2 py-1">Class</th>
                     <th className="border px-2 py-1">Sec</th>
-                    {/* Dynamically render exam columns */}
+
                     {(selectedExamLevel === "L1"
                       ? ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
                       : selectedExamLevel === "L2"
                       ? ["IQEOL2", "IQROL2", "IQSOL2", "IQMOL2"]
-                      :["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
+                      : ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
                     ).map((examCode) => (
-                        <th className="border px-2 py-1" key={examCode}>
+                      <th className="border px-2 py-1" key={examCode}>
                         {examCode.replace("L1", "").replace("L2", "")}
-                        </th>
+                      </th>
                     ))}
                   </tr>
                 </thead>
@@ -1000,26 +1026,73 @@ fetchStudents(1, searchData);
                           {student.motherName || ""}
                         </td>
                         <td className="border px-2 py-1">{student.class}</td>
-                        <td className="border px-2 py-1">
-                          {student.section}
-                        </td>
-                        
-                      {/* Dynamically render exam columns */}
-                      {(selectedExamLevel === "L1"
-                        ? ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
-                        : selectedExamLevel === "L2"
-                        ? ["IQEOL2", "IQROL2", "IQSOL2", "IQMOL2"]
-                        : ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1", "IQEOL2", "IQROL2", "IQSOL2", "IQMOL2", "IQGKOL2"]
-                      ).map((examCode) => (
+                        <td className="border px-2 py-1">{student.section}</td>
+
+
+                        {
+                        selectedExamLevel === "" ||
+                        selectedExamLevel === "L1" ? (
+                          selectedExam!="" && examListPlainArray.includes('IQEOL1') &&
                           <td className="border px-2 py-1">
-                          {examCode === "IQEOL1" && student.IENGOL1 === "1" ? "YES" : ""}
-                          {examCode === "IQROL1" && student.IAOL1 === "1" ? "YES" : ""}
-                            {examCode === "IQSOL1" && student.ITSTL1 === "1" ? "YES" : ""}
-                            {examCode === "IQMOL1" && student.IMOL1 === "1" ? "YES" : ""}
-                            {examCode === "IQGKOL1" && student.IGKOL1 === "1" ? "YES" : ""}
-                            {examCode === "IQEOL2" && student.IENGOL2 === "1" ? "YES" : ""}
-                        </td>
-                      ))}
+                            {student.IENGOL1 === "1" ? "YES" : "NO"}
+                          </td>
+                        ) : (
+
+                        selectedExam ==="" || (selectedExam!="" && examListPlainArray.includes('IQEOL2')) &&
+                          <td className="border px-2 py-1">
+                            {
+                            student.IENGOL2 === "1" ? "YES" : "NO"
+                            }
+                          </td>
+
+                        )
+                        }
+
+                        {
+                        selectedExamLevel === "" ||
+                        selectedExamLevel === "L1" ? (
+                          <td className="border px-2 py-1">
+                            {student.IAOL1 === "1" ? "YES" : "NO"}
+                          </td>
+                        ) : (
+                          <td className="border px-2 py-1">
+                            {student.IAOL2 === "1" ? "YES" : "NO"}
+                          </td>
+                        )}
+
+                        {
+                        selectedExamLevel === "" ||
+                        selectedExamLevel === "L1" ? (
+                          <td className="border px-2 py-1">
+                            {student.ITSTL1 === "1" ? "YES" : "NO"}
+                          </td>
+                        ) : (
+                          <td className="border px-2 py-1">
+                            {student.ITSTL2 === "1" ? "YES" : "NO"}
+                          </td>
+                        )}
+
+                        {
+                        selectedExamLevel === "" ||
+                        selectedExamLevel === "L1" ? (
+                          <td className="border px-2 py-1">
+                            {student.IMOL1 === "1" ? "YES" : "NO"}
+                          </td>
+                        ) : (
+                          <td className="border px-2 py-1">
+                            {student.IMOL2 === "1" ? "YES" : "NO"}
+                          </td>
+                        )}
+
+                        {/* last column */}
+                        {
+                        selectedExamLevel === "" ||
+                          (
+                            selectedExamLevel === "L1" && (
+                            <td className="border px-2 py-1">
+                              {student.IGKOL1 === "1" ? "YES" : "NO"}
+                            </td>
+                          ))}
                       </tr>
                     ))
                   ) : (
@@ -1056,12 +1129,11 @@ fetchStudents(1, searchData);
                 </div>
               </div>
               <div className="text-xs border-t pt-2 mt-2">
-                <strong>IMPORTANT NOTE:</strong> Please note that we shall
-                print certificates as per the above details. So this is very
-                important to check the spelling and correct if found wrong. So
-                ask every participant to cross check their details and then
-                sign on it. We will not re-print the certificate(s) after
-                that.
+                <strong>IMPORTANT NOTE:</strong> Please note that we shall print
+                certificates as per the above details. So this is very important
+                to check the spelling and correct if found wrong. So ask every
+                participant to cross check their details and then sign on it. We
+                will not re-print the certificate(s) after that.
               </div>
               <div className="mt-2"></div>
             </div>
