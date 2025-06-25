@@ -17,6 +17,7 @@ import AllKindergartenStudents from "./pages/AllKindergartenStudent"
 import UploadBulkKindergartenStudentData from "./pages/UploadBulkKindergartenStudent"
 import StudyMaterial from "./pages/StudyMaterial";
 import Amountwiselist from "./pages/Amountwiselist";
+import SectionPartList from "./pages/SectionPartList";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             {/* <Route path="/updateStudent" element={< UpdateStudent />} /> */}
             <Route path="/School-wise" element={<SchoolPartList />} />
             <Route path="/Cost-wise" element={<Amountwiselist />} />
+            <Route path="/Section-wise" element={<SectionPartList />} />
             <Route path="/StudyMaterial" element={<StudyMaterial />} />
             <Route path="/allSchools" element={< AllSchools />} />
             <Route path="/allStudents" element={< AllStudents />} />

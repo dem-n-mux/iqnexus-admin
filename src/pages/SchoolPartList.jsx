@@ -364,7 +364,7 @@ const SchoolPartList = () => {
 
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
-        orientation: "landscape",
+        orientation: 'portrait',
         unit: "mm",
         format: "a4",
       });
