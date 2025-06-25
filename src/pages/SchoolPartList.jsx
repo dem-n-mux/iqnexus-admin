@@ -107,7 +107,7 @@ const SchoolPartList = () => {
   const [limit] = useState(10);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
   const [selectedExamLevel, setSelectedExamLevel] = useState("");
-  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExam, setSelectedExam] = useState([]);
   const [selectedSchoolCode, setSelectedSchoolCode] = useState("");
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
@@ -133,6 +133,7 @@ const SchoolPartList = () => {
   ];
 
   useEffect(() => {
+    console.log("Selected Exam Level:", selectedExam);
     // Flatten the exam list to a plain array
     if(selectedExam!=''){
     const flatExams = selectedExam.map((exam) => {
@@ -146,10 +147,8 @@ const SchoolPartList = () => {
   console.log("Exam List Plain Array:", examListPlainArray);
   // Fetch the student data based on filters
   const handleFetchStudents = async () => {
-    if (!selectedExamLevel) {
-      alert("Please select exam level!");
-      return;
-    }
+    if (selectedExamLevel || selectedExam.length>0 || selectedSchoolCode || selectedClasses.length > 0 || selectedSections.length > 0) {
+
     let selectedExamNew = [];
     if (selectedExamLevel === "L1" && !selectedExam) {
       selectedExamNew = [
@@ -173,6 +172,7 @@ const SchoolPartList = () => {
           ? selectedSections.map((opt) => opt.value)
           : undefined,
     };
+  
 
     try {
       setIsFetching(true);
@@ -198,6 +198,12 @@ const SchoolPartList = () => {
     } finally {
       setIsFetching(false);
     }
+  }
+    else  {
+          alert("Please select atleast one filter!");
+      return;
+    
+  }
   };
 
   const handleDownloadPDF = async () => {
@@ -216,6 +222,7 @@ const SchoolPartList = () => {
         if (node.nodeType === Node.ELEMENT_NODE) {
           const style = window.getComputedStyle(node);
           originalStyles.set(node, {
+            
             color: style.color,
             backgroundColor: style.backgroundColor,
             borderColor: style.borderColor,
@@ -357,7 +364,7 @@ const SchoolPartList = () => {
 
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
-        orientation: "portrait",
+        orientation: "landscape",
         unit: "mm",
         format: "a4",
       });
@@ -519,15 +526,15 @@ const SchoolPartList = () => {
 
         return {
           "S.No": index + 1,
-          "Student Name": student.studentName || "N/A",
-          DOB: student.dob || "N/A",
-          "Roll No": student.rollNo || "N/A",
-          Mobile: student.mobNo || "N/A",
-          "School Code": student.schoolCode || "N/A",
-          Class: student.class || "N/A",
-          Section: student.section || "N/A",
-          "Father Name": student.fatherName || "N/A",
-          "Mother Name": student.motherName || "N/A",
+          "Student Name": student.studentName || "ALL",
+          DOB: student.dob || "ALL",
+          "Roll No": student.rollNo || "ALL",
+          Mobile: student.mobNo || "ALL",
+          "School Code": student.schoolCode || "ALL",
+          Class: student.class || "ALL",
+          Section: student.section || "ALL",
+          "Father Name": student.fatherName || "ALL",
+          "Mother Name": student.motherName || "ALL",
           ...booleanMappedFields,
           "Total Basic Level Participated Exams":
             student.totalBasicLevelParticipatedExams,
@@ -539,7 +546,7 @@ const SchoolPartList = () => {
           "Concession Reason": student.concessionReason,
           "Parents Working School": student.ParentsWorkingschool,
           Designation: student.designation,
-          City: student.city || "N/A",
+          City: student.city || "ALL",
           "Advance Level Paid Amount": student.advanceLevelAmountPaid,
           "Advance Level Amount Paid Online":
             student.advanceLevelAmountPaidOnline,
@@ -667,148 +674,7 @@ const SchoolPartList = () => {
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchData({ ...searchData, [e.target.name]: e.target.value });
-  };
 
-  const handleClassChange = (selectedOptions) => {
-    setSearchData({
-      ...searchData,
-      classes: selectedOptions ? selectedOptions.map((opt) => opt.value) : [],
-    });
-  };
-
-  const handleSectionChange = (selectedOptions) => {
-    setSearchData({
-      ...searchData,
-      sections: selectedOptions ? selectedOptions.map((opt) => opt.value) : [],
-    });
-  };
-
-  const handleSearchSubmit = async (e) => {
-    setIsFilterApplied(true);
-    e.preventDefault();
-    setCurrentPage(1);
-    await fetchStudents(1, searchData);
-  };
-
-  const handleClearFilters = () => {
-    setSearchData({
-      studentName: "",
-      classes: [],
-      schoolCode: null,
-      rollNo: "",
-      sections: [],
-      subject: "",
-      totalPages: null,
-    });
-    setSearched(false);
-    setCurrentPage(1);
-    fetchStudents(1);
-  };
-
-  const handleDelete = async (rollNo, studentClass) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
-      try {
-        const res = await axios.delete(`${BASE_URL}/student`, {
-          data: { rollNo, class: studentClass },
-        });
-        alert(res.data.message);
-        fetchStudents(currentPage, searchData);
-      } catch (err) {
-        alert("Failed to delete student");
-      }
-    }
-  };
-
-  const handleUpdateChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setUpdatedData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const openUpdateModal = (student) => {
-    setSelectedStudent(student);
-    const formattedData = {};
-    Object.keys(student).forEach((key) => {
-      if (booleanFields.includes(key)) {
-        formattedData[key] = student[key] === "1" || student[key] === true;
-      } else if (key === "schoolCode") {
-        formattedData[key] = student[key] ? Number(student[key]) : "";
-      } else {
-        formattedData[key] = student[key] || "";
-      }
-    });
-    setUpdatedData(formattedData);
-    setIsModalOpen(true);
-  };
-
-  const handleUpdateSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = { _id: selectedStudent._id };
-      Object.keys(updatedData).forEach((key) => {
-        if (booleanFields.includes(key)) {
-          payload[key] = updatedData[key] ? "1" : "0";
-        } else {
-          payload[key] = updatedData[key];
-        }
-      });
-      const res = await axios.put(`${BASE_URL}/student`, payload);
-      alert(res.data.message);
-      setIsModalOpen(false);
-      fetchStudents(currentPage, searchData);
-    } catch (error) {
-      console.error("Update error:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to update student";
-      alert(errorMessage);
-    }
-  };
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  const getPaginationRange = () => {
-    const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
-
-    let start = Math.max(1, currentPage - delta);
-    let end = Math.min(totalPages, currentPage + delta);
-
-    if (currentPage <= delta + 1) {
-      end = Math.min(totalPages, delta * 2 + 1);
-    }
-    if (currentPage >= totalPages - delta) {
-      start = Math.max(1, totalPages - delta * 2);
-    }
-
-    for (let i = start; i <= end; i++) {
-      range.push(i);
-    }
-
-    if (start > 2) {
-      rangeWithDots.push(1);
-      rangeWithDots.push("...");
-    }
-
-    rangeWithDots.push(...range);
-
-    if (end < totalPages - 1) {
-      rangeWithDots.push("...");
-      rangeWithDots.push(totalPages);
-    } else if (end === totalPages - 1) {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots;
-  };
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 flex items-center justify-end">
@@ -965,21 +831,21 @@ const SchoolPartList = () => {
               <div className="grid grid-cols-2 text-xs mb-6 gap-y-2">
                 <div id="top-left">
                   <p>
-                    <strong>School Name:</strong> {school.schoolName || "N/A"}
+                    <strong>School Name:</strong> {school.schoolName || "ALL"}
                   </p>
                   <p>
-                    <strong>School Code:</strong> {school.schoolCode || "N/A"}
+                    <strong>School Code:</strong> {school.schoolCode || "ALL"}
                   </p>
                   <p>
-                    <strong>City:</strong> {school.city || "N/A"}
+                    <strong>City:</strong> {school.city || "ALL"}
                   </p>
                   <p>
-                    <strong>Area:</strong> {school.area || "N/A"}
+                    <strong>Area:</strong> {school.area || "ALL"}
                   </p>
                 </div>
                 <div className="ml-[60%]">
                   <p>
-                    <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
+                    <strong>Exam Incharge:</strong> {school.incharge || "ALL"}
                   </p>
                   <p>
                     <strong>Print Date:</strong>{" "}
@@ -998,12 +864,14 @@ const SchoolPartList = () => {
                     <th className="border px-2 py-1">Class</th>
                     <th className="border px-2 py-1">Sec</th>
 
-                    {(selectedExamLevel === "L1"
+                    {(
+                      selectedExamLevel === "L1"
                       ? ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
                       : selectedExamLevel === "L2"
                       ? ["IQEOL2", "IQROL2", "IQSOL2", "IQMOL2"]
                       : ["IQEOL1", "IQROL1", "IQSOL1", "IQMOL1", "IQGKOL1"]
                     ).map((examCode) => (
+                     ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes(examCode))) &&
                       <th className="border px-2 py-1" key={examCode}>
                         {examCode.replace("L1", "").replace("L2", "")}
                       </th>
@@ -1032,13 +900,13 @@ const SchoolPartList = () => {
                         {
                         selectedExamLevel === "" ||
                         selectedExamLevel === "L1" ? (
-                          selectedExam!="" && examListPlainArray.includes('IQEOL1') &&
+                ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQEOL1'))) &&
                           <td className="border px-2 py-1">
                             {student.IENGOL1 === "1" ? "YES" : "NO"}
                           </td>
                         ) : (
 
-                        selectedExam ==="" || (selectedExam!="" && examListPlainArray.includes('IQEOL2')) &&
+                       ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQEOL2'))) &&
                           <td className="border px-2 py-1">
                             {
                             student.IENGOL2 === "1" ? "YES" : "NO"
@@ -1050,11 +918,14 @@ const SchoolPartList = () => {
 
                         {
                         selectedExamLevel === "" ||
-                        selectedExamLevel === "L1" ? (
+                        selectedExamLevel === "L1" ? 
+                         ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQROL1'))) &&
+                        (
                           <td className="border px-2 py-1">
                             {student.IAOL1 === "1" ? "YES" : "NO"}
                           </td>
                         ) : (
+                           ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQROL2'))) &&
                           <td className="border px-2 py-1">
                             {student.IAOL2 === "1" ? "YES" : "NO"}
                           </td>
@@ -1063,10 +934,12 @@ const SchoolPartList = () => {
                         {
                         selectedExamLevel === "" ||
                         selectedExamLevel === "L1" ? (
+                          ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQSOL1'))) &&
                           <td className="border px-2 py-1">
                             {student.ITSTL1 === "1" ? "YES" : "NO"}
                           </td>
                         ) : (
+                          ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQSOL2'))) &&
                           <td className="border px-2 py-1">
                             {student.ITSTL2 === "1" ? "YES" : "NO"}
                           </td>
@@ -1075,10 +948,12 @@ const SchoolPartList = () => {
                         {
                         selectedExamLevel === "" ||
                         selectedExamLevel === "L1" ? (
+                          ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQMOL1'))) &&
                           <td className="border px-2 py-1">
                             {student.IMOL1 === "1" ? "YES" : "NO"}
                           </td>
                         ) : (
+                          ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQMOL2'))) &&
                           <td className="border px-2 py-1">
                             {student.IMOL2 === "1" ? "YES" : "NO"}
                           </td>
@@ -1086,13 +961,13 @@ const SchoolPartList = () => {
 
                         {/* last column */}
                         {
-                        selectedExamLevel === "" ||
-                          (
-                            selectedExamLevel === "L1" && (
+                        (selectedExamLevel === "" || selectedExamLevel === "L1" ) && 
+
+                              ( selectedExam.length===0 || ( selectedExam.length>0  && examListPlainArray.includes('IQGKOL1'))) &&
                             <td className="border px-2 py-1">
                               {student.IGKOL1 === "1" ? "YES" : "NO"}
                             </td>
-                          ))}
+                          }
                       </tr>
                     ))
                   ) : (
