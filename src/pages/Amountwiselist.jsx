@@ -81,7 +81,7 @@ const examFullNames = {
   },
 };
 
-const SchoolPartList = () => {
+const Amountwiselist = () => {
   const [students, setStudents] = useState([]);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [searched, setSearched] = useState(false);
@@ -678,7 +678,7 @@ const SchoolPartList = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 flex items-center justify-end">
-      {/* Participationlist */}
+      {/* Attendance Modal */}
       <div>
         <div className="fixed inset-0 flex items-center justify-end mr-[130px]">
           <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-[80%] max-h-[95vh] overflow-y-auto">
@@ -838,7 +838,7 @@ const SchoolPartList = () => {
               <div className="text-center mb-6">
                 <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
                 <h1 className="text-lg font-semibold uppercase">
-                  Participation List Basic
+                  Participation List Cost-Wise
                 </h1>
                 <h2 className="font-bold uppercase underline mt-2">
                   {selectedExamLevel
@@ -894,7 +894,7 @@ const SchoolPartList = () => {
                         {examCode.replace("L1", "").replace("L2", "")}
                       </th>
                     ))}
-                    
+                    <th className="border px-2 py-1">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -986,7 +986,21 @@ const SchoolPartList = () => {
                             <td className="border px-2 py-1">
                               {student.IGKOL1 === "1" ? "YES" : "NO"}
                             </td>
-                          }
+                        }
+
+                        {
+                        (selectedExamLevel === "" ||
+                        selectedExamLevel === "L1") ? (
+                          ( selectedExam.length===0 || ( selectedExam.length>0 )) &&
+                          <td className="border px-2 py-1">
+                            {student.basicLevelFullAmount}
+                          </td>
+                        ) : (
+                          ( selectedExam.length===0 ||  (selectedExam.length>0)) && 
+                          <td className="border px-2 py-1">
+                            {student.advanceLevelAmountPaid}
+                          </td>
+                        )}
                       </tr>
                     ))
                   ) : (
@@ -1041,8 +1055,8 @@ const SchoolPartList = () => {
               >
                 Close
               </button>
-{/* 
-              {isFetched && (
+
+              {/* {isFetched && (
                 <button
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleDownloadPDF}
@@ -1066,4 +1080,4 @@ const SchoolPartList = () => {
   );
 };
 
-export default SchoolPartList;
+export default Amountwiselist;

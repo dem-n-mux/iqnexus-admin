@@ -16,6 +16,7 @@ import KinderGartenStudentForm from "./pages/kindergarten-student-form"
 import AllKindergartenStudents from "./pages/AllKindergartenStudent"
 import UploadBulkKindergartenStudentData from "./pages/UploadBulkKindergartenStudent"
 import StudyMaterial from "./pages/StudyMaterial";
+import Amountwiselist from "./pages/Amountwiselist";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/singleSchool" element={<SingleSchoolForm />} />
             {/* <Route path="/updateStudent" element={< UpdateStudent />} /> */}
             <Route path="/School-wise" element={<SchoolPartList />} />
+            <Route path="/Cost-wise" element={<Amountwiselist />} />
             <Route path="/StudyMaterial" element={<StudyMaterial />} />
             <Route path="/allSchools" element={< AllSchools />} />
             <Route path="/allStudents" element={< AllStudents />} />
