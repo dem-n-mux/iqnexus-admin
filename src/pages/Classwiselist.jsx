@@ -26,127 +26,44 @@ const booleanFields = [
   "Duplicates",
 ];
 
-const SectionPartList = () => {
+const Classwiselist = () => {
   const [students, setStudents] = useState([]);
   const [searched, setSearched] = useState(false);
   const [countData, setCountData] = useState({
    IENGOL1:{
-    "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-  
+    "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
    },
+
    IAOL1:{
-    "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
+    "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
    },
 
     ITSTL1:{
-    "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
-
+    "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
   },
     IMOL1:{
-     "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I : 0  },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
-
+    "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
   },
     IGKOL1: {
-      "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I :  0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
+     "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
     },
 
     IENGOL2:{
-      "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I :  0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
+     "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
     },
     IAOL2:{
-      "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I :  0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
+      "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
     
 },
 
     ITSTL2:{
-              "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I :  0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
+      "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
     }
 
 
     ,
     IMOL2:{
-                "1": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-      "2": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "3": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-       "4": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "5": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-     "6": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "7": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I :  0 },
-    "8": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "9": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 },
-    "10": { A: 0, B: 0, C: 0, D: 0, E: 0,F: 0, G: 0, H: 0, I: 0 }
+     "Total":{1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0},
     }
 
   }
@@ -205,59 +122,48 @@ const SectionPartList = () => {
     }
   }, [selectedExam]);
 
-  //prepare count data of all calsses through tudent data
+  //prepare count data of all calsses through student data
 
   useEffect(() => {
+    if (studentsData.length > 0) {
+      const temp = { ...countData };
+      // Reset all counts to 0
+      Object.keys(temp).forEach((subject) => {
+      Object.keys(temp[subject].Total).forEach((cls) => {
+        temp[subject].Total[cls] = 0;
+      });
+      });
 
-    if(studentsData.length>0){
-        const temp ={...countData};
-        Object.keys(temp).forEach((subject) => {
-            Object.keys(temp[subject]).forEach((cls) => {
-                Object.keys(temp[subject][cls]).forEach((sec) => {
-                    temp[subject][cls][sec] = 0;
-                });
-            });
-        });
-        if(selectedExamLevel==="L1"){
-     studentsData.map((student) => {
+      if (selectedExamLevel === "L1") {
+      studentsData.forEach((student) => {
+        if (student["IENGOL1"] === "1")
+        temp["IENGOL1"].Total[student.class] = (temp["IENGOL1"].Total[student.class] || 0) + 1;
+        if (student["IAOL1"] === "1")
+        temp["IAOL1"].Total[student.class] = (temp["IAOL1"].Total[student.class] || 0) + 1;
+        if (student["ITSTL1"] === "1")
+        temp["ITSTL1"].Total[student.class] = (temp["ITSTL1"].Total[student.class] || 0) + 1;
+        if (student["IMOL1"] === "1")
+        temp["IMOL1"].Total[student.class] = (temp["IMOL1"].Total[student.class] || 0) + 1;
+        if (student["IGKOL1"] === "1")
+        temp["IGKOL1"].Total[student.class] = (temp["IGKOL1"].Total[student.class] || 0) + 1;
+      });
+      }
+      if (selectedExamLevel === "L2") {
+      studentsData.forEach((student) => {
+        if (student["IENGOL2"] === "1")
+        temp["IENGOL2"].Total[student.class] = (temp["IENGOL2"].Total[student.class] || 0) + 1;
+        if (student["IAOL2"] === "1")
+        temp["IAOL2"].Total[student.class] = (temp["IAOL2"].Total[student.class] || 0) + 1;
+        if (student["ITSTL2"] === "1")
+        temp["ITSTL2"].Total[student.class] = (temp["ITSTL2"].Total[student.class] || 0) + 1;
+        if (student["IMOL2"] === "1")
+        temp["IMOL2"].Total[student.class] = (temp["IMOL2"].Total[student.class] || 0) + 1;
+      });
+      }
 
-            student["IENGOL1"] ==="1" &&   
-             (temp["IENGOL1"][student.class][student.section] = (temp["IENGOL1"][student.class][student.section] || 0 )+ 1)
-            student["IAOL1"] ==="1" &&
-                (temp["IAOL1"][student.class][student.section] = (temp["IAOL1"][student.class][student.section] || 0 )+ 1)
-            student["ITSTL1"] ==="1" &&
-                (temp["ITSTL1"][student.class][student.section] = (temp["ITSTL1"][student.class][student.section] || 0 )+ 1)
-            student["IMOL1"] ==="1" &&
-                (temp["IMOL1"][student.class][student.section] = (temp["IMOL1"][student.class][student.section] || 0 )+ 1)
-            student["IGKOL1"] ==="1" &&
-                (temp["IGKOL1"][student.class][student.section] = (temp["IGKOL1"][student.class][student.section] || 0 )+ 1)
-       
-
-            
-        })
-        }
-        if(selectedExamLevel==="L2"){
-            studentsData.map((student) => {
-            student["IENGOL2"] ==="1" &&   
-             (temp["IENGOL2"][student.class][student.section] = (temp["IENGOL2"][student.class][student.section] || 0 )+ 1)
-
-            student["IAOL2"] ==="1" &&
-                (temp["IAOL2"][student.class][student.section] = (temp["IAOL2"][student.class][student.section] || 0 )+ 1)
-
-            student["ITSTL2"] ==="1" &&
-                (temp["ITSTL2"][student.class][student.section] = (temp["ITSTL2"][student.class][student.section] || 0 )+ 1)
-
-            student["IMOL2"] ==="1" &&
-                (temp["IMOL2"][student.class][student.section] = (temp["IMOL2"][student.class][student.section] || 0 )+ 1)
-        })
-
-        }
-   
-        console.log("Count Data:", temp);
-
-    setCountData(temp)
-        }
-
+      console.log("Count Data:", temp);
+      setCountData(temp);
+    }
   }, [studentsData]);
   // Fetch the student data based on filters
   const handleFetchStudents = async () => {
@@ -957,115 +863,103 @@ const SectionPartList = () => {
               )}
             </div>
 
-            {/* Preview Student Data */}
-            <div
-              id="download"
-              style={{ color: "#000000", backgroundColor: "#ffffff" }}
-              className="bg-white p-7 rounded-lg shadow-md border text-sm w-full"
-              ref={sectionRef}
-            >
-              <div className="text-center mb-6">
-                <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
-                <h1 className="text-lg font-semibold uppercase">
-                  PARTICIPATION LIST SECTION WISE
-                </h1>
-                <h2 className="font-bold uppercase underline mt-2">
-                  {selectedExamLevel
-                    ? `${selectedExamLevel === "L1" ? "Basic" : "Advance"}`
-                    : "Exam Level Not Selected"}
-                </h2>
-              </div>
-              <div className="grid grid-cols-2 text-xs mb-6 gap-y-2">
-                <div id="top-left">
-                  <p>
-                    <strong>School Name:</strong> {school.schoolName || "ALL"}
-                  </p>
-                  <p>
-                    <strong>School Code:</strong> {school.schoolCode || "ALL"}
-                  </p>
-                  <p>
-                    <strong>City:</strong> {school.city || "ALL"}
-                  </p>
-                  <p>
-                    <strong>Area:</strong> {school.area || "ALL"}
-                  </p>
-                </div>
-                <div className="ml-[60%]">
-                  <p>
-                    <strong>Exam Incharge:</strong> {school.incharge || "ALL"}
-                  </p>
-                  <p>
-                    <strong>Print Date:</strong>{" "}
-                    {new Date().toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-              {exams.map(
-                (exam) =>
-                         exam.level === selectedExamLevel   && 
-                (examListPlainArray.length>0 ? examListPlainArray.includes(exam.name) :true)&&
-                 (
-                    <div className="gap-3 flex flex-col mb-3 " key={exam.name}>
-                        
-                      <h2>{exam.name}</h2>
-                      <table className="table-auto w-full border text-center text-xs mb-4">
-
+            {/* /* Preview Student Data */ }
+                  <div
+                    id="download"
+                    style={{ color: "#000000", backgroundColor: "#ffffff" }}
+                    className="bg-white p-7 rounded-lg shadow-md border text-sm w-full"
+                    ref={sectionRef}
+                  >
+                    <div className="text-center mb-6">
+                    <img src={logo} alt="IQ Nexus" className="mx-auto h-12 mb-2" />
+                    <h1 className="text-lg font-semibold uppercase">
+                      PARTICIPATION LIST SECTION WISE
+                    </h1>
+                    <h2 className="font-bold uppercase underline mt-2">
+                      {selectedExamLevel
+                      ? `${selectedExamLevel === "L1" ? "Basic" : "Advance"}`
+                      : "Exam Level Not Selected"}
+                    </h2>
+                    </div>
+                    <div className="grid grid-cols-2 text-xs mb-6 gap-y-2">
+                    <div id="top-left">
+                      <p>
+                      <strong>School Name:</strong> {school.schoolName || "ALL"}
+                      </p>
+                      <p>
+                      <strong>School Code:</strong> {school.schoolCode || "ALL"}
+                      </p>
+                      <p>
+                      <strong>City:</strong> {school.city || "ALL"}
+                      </p>
+                      <p>
+                      <strong>Area:</strong> {school.area || "ALL"}
+                      </p>
+                    </div>
+                    <div className="ml-[60%]">
+                      <p>
+                      <strong>Exam Incharge:</strong> {school.incharge || "ALL"}
+                      </p>
+                      <p>
+                      <strong>Print Date:</strong>{" "}
+                      {new Date().toLocaleDateString()}
+                      </p>
+                    </div>
+                    </div>
+                    {exams.map(
+                    (exam) =>
+                      exam.level === selectedExamLevel &&
+                      (examListPlainArray.length > 0
+                      ? examListPlainArray.includes(exam.name)
+                      : true) && (
+                      <div className="gap-3 flex flex-col mb-3 " key={exam.name}>
+                        <h2>{exam.name}</h2>
+                        <table className="table-auto w-full border text-center text-xs mb-4">
                         <thead className="bg-gray-100">
                           <tr>
-                            <th className="border px-2 py-1">class</th>
-                            {allSections.map((section) => (
-                              <th className="border px-2 py-1">
-                                {section.value}
-                              </th>
+                            <th>Class</th>
+                          {classOptions
+                            .filter(
+                            (classs) =>
+                              classs.value !== "11" &&
+                              classs.value !== "12"
+                            )
+                            .map((classs) => (
+                            <th className="border px-2 py-1" key={classs.value}>
+                              {classs.value}
+                            </th>
                             ))}
-
+                          </tr>
+                          <tr>
+                            <td className="border px-2 py-1">Total</td>
+                          {classOptions
+                            .filter(
+                            (classs) =>
+                              classs.value !== "11" &&
+                              classs.value !== "12"
+                            )
+                            .map((classs) => (
+                            <td className="border px-2 py-1" key={classs.value}>
+                              {countData[nameMappings[exam.name]] &&
+                              countData[nameMappings[exam.name]].Total &&
+                              typeof countData[nameMappings[exam.name]].Total[classs.value] !==
+                              "undefined"
+                              ? countData[nameMappings[exam.name]].Total[classs.value]
+                              : 0}
+                            </td>
+                            ))}
                           </tr>
                         </thead>
+                        </table>
+                      </div>
+                      )
+                    )}
 
-                        <tbody>
-                          {studentsData.length > 0 ?
-                            classOptions.map(
-                              (classOption, index) =>
-                                classOption.value !== "11" &&
-                                classOption.value !== "12" && (
-                                  <tr key={classOption.value}>
-                                    <td className="border px-2 py-1">
-                                      {" "}
-                                      {classOption.value}
-
-                                    </td>
-                              {
-                                       Object.values( countData[nameMappings[exam.name]][index+1]).map((count) => (
-                                              <td className="border px-2 py-1">
-                                                {count}
-                                              </td>
-                                       ))
-                                        }
-                              
-                                  </tr>
-                                )
-                            ):
-                            (
-                            <tr>
-                              <td colSpan={20} className="text-center py-3">
-                                No student data available
-                              </td>
-                            </tr>
-                          )
-                            
-                            }
-               
-                        </tbody>
-                      </table>
-                    </div>
-                  )
-              )}
-
-              <div className="grid grid-cols-2 text-xs mb-2">
-                <div>
-                  <p>
-                    <strong>Present Student:</strong>{" "}
-                    {/* {studentsData.filter((s) => s[selectedExam] === "1").length} */}
+                    <div className="grid grid-cols-2 text-xs mb-2">
+                    <div>
+                      <p>
+                      <strong>Present Student:</strong>{" "}
+                      {/* {studentsData.filter((s) => s[selectedExam] === "1").length} */}
                   </p>
                   <p>
                     <strong>Absent Student:</strong>{" "}
@@ -1099,7 +993,7 @@ const SectionPartList = () => {
             <div className="flex justify-between mt-2">
     
 
-              {isFetched && (
+              {/* {isFetched && (
                 <button
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleDownloadPDF}
@@ -1114,7 +1008,7 @@ const SectionPartList = () => {
                     "Download PDF"
                   )}
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -1123,4 +1017,4 @@ const SectionPartList = () => {
   );
 };
 
-export default SectionPartList;
+export default Classwiselist;

@@ -54,6 +54,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [participationOpen, setParticipationOpen] = useState(false);
   const location = useLocation();
+  const [schoolsOpen, setSchoolsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const closeSidebar = () => window.innerWidth < 768 && setIsOpen(false);
@@ -92,63 +93,82 @@ const Sidebar = () => {
         </div>
 
         {/* Scrollable Navigation */}
-        <div className="flex-1 overflow-y-auto py-4" style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(255,255,255,0.4) rgba(0,0,0,0.1)'
-        }}>
+              <div className="flex-1 overflow-y-auto py-4" style={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(255,255,255,0.4) rgba(0,0,0,0.1)'
+              }}>
 
-          <nav className="space-y-1">
-            <MenuItem
-              icon={<LayoutDashboard size={20} />}
-              text="Dashboard"
-              href="/"
-              active={location.pathname === "/"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<Building2 size={20} />}
-              text="All Schools"
-              href="/allSchools"
-              active={location.pathname === "/allSchools"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<Users size={20} />}
-              text="All Students"
-              href="/allStudents"
-              active={location.pathname === "/allStudents"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<FileUp size={20} />}
-              text="Upload Students"
-              href="/uploadStudentData"
-              active={location.pathname === "/uploadStudentData"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<UserPlus size={20} />}
-              text="Add Student"
-              href="/singleStudent"
-              active={location.pathname === "/singleStudent"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<School size={20} />}
-              text="Add School"
-              href="/singleSchool"
-              active={location.pathname === "/singleSchool"}
-              onClick={closeSidebar}
-            />
-            <MenuItem
-              icon={<IdCard size={20} />}
-              text="Admit Card"
-              href="/genrate-admit-card"
-              active={location.pathname === "/genrate-admit-card"}
-              onClick={closeSidebar}
-            />
+              <nav className="space-y-1">
+                <MenuItem
+                icon={<LayoutDashboard size={20} />}
+                text="Dashboard"
+                href="/"
+                active={location.pathname === "/"}
+                onClick={closeSidebar}
+                />
+                {/* Schools Dropdown */}
+                <MenuItem
+                icon={<Building2 size={20} />}
+                text="Schools"
+                href="#"
+                active={location.pathname.startsWith("/allSchools")}
+                onClick={e => {
+                  e.preventDefault();
+                  setSchoolsOpen?.(prev => !prev);
+                }}
+                isDropdown={true}
+                isOpen={schoolsOpen}
+                >
+                {schoolsOpen && (
+                  <div className="bg-[#003B87] pl-6">
+                  <MenuItem
+                    text="All Schools"
+                    href="/allSchools"
+                    active={location.pathname === "/allSchools"}
+                    onClick={closeSidebar}
+                  />
+                  <MenuItem
+                    text="Add School"
+                    href="/singleSchool"
+                    active={location.pathname === "/singleSchool"}
+                    onClick={closeSidebar}
+                  />
+                  </div>
+                )}
+                </MenuItem>
+                {/* End Schools Dropdown */}
 
-            {/* Participation List Dropdown */}
+              <MenuItem
+                icon={<Users size={20} />}
+                text="All Students"
+                href="/allStudents"
+                active={location.pathname === "/allStudents"}
+                onClick={closeSidebar}
+              />
+              <MenuItem
+                icon={<FileUp size={20} />}
+                text="Upload Students"
+                href="/uploadStudentData"
+                active={location.pathname === "/uploadStudentData"}
+                onClick={closeSidebar}
+              />
+              <MenuItem
+                icon={<UserPlus size={20} />}
+                text="Add Student"
+                href="/singleStudent"
+                active={location.pathname === "/singleStudent"}
+                onClick={closeSidebar}
+              />
+              
+              <MenuItem
+                icon={<IdCard size={20} />}
+                text="Admit Card"
+                href="/genrate-admit-card"
+                active={location.pathname === "/genrate-admit-card"}
+                onClick={closeSidebar}
+              />
+
+              {/* Participation List Dropdown */}
             <MenuItem
               icon={<ClipboardList size={20} />}
               text="Participation List"

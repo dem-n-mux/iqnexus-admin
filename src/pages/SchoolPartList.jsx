@@ -1033,32 +1033,7 @@ const SchoolPartList = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex justify-between mt-2">
-              <button
-                onClick={() => setIsAttendanceModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isDownloading || isFetching}
-              >
-                Close
-              </button>
-{/* 
-              {isFetched && (
-                <button
-                  className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={handleDownloadPDF}
-                  disabled={isDownloading}
-                >
-                  {isDownloading ? (
-                    <>
-                      <span className="w-5 h-5 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                      Downloading...
-                    </>
-                  ) : (
-                    "Download PDF"
-                  )}
-                </button>
-              )} */}
-            </div>
+            
           </div>
         </div>
       </div>
