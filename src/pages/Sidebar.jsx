@@ -27,7 +27,7 @@ const MenuItem = ({
   isDropdown = false,
   isOpen = false
 }) => (
-  <div className={`group ${active ? "bg-blue-900" : "hover:bg-blue-800"}`}>
+  < div className={`group ${active ? "bg-blue-900" : "hover:bg-blue-800"}`}>
     <Link
       to={href}
       onClick={onClick}
@@ -55,6 +55,9 @@ const Sidebar = () => {
   const [participationOpen, setParticipationOpen] = useState(false);
   const location = useLocation();
   const [schoolsOpen, setSchoolsOpen] = useState(false);
+  const [studentsOpen, setStudentsOpen] = useState(false);
+  const [KGStudentsOpen, setKGStudentsOpen] = useState(false);
+  const [StudyMaterialOpen, setStudyMaterialOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const closeSidebar = () => window.innerWidth < 768 && setIsOpen(false);
@@ -65,7 +68,7 @@ const Sidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-[#003B87] text-white hover:bg-[#002d69] transition-colors"
+        className=" fixed top-4 left-4 z-50 p-2 rounded-lg bg-[#003B87] text-white hover:bg-[#002d69] transition-colors"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -137,6 +140,20 @@ const Sidebar = () => {
                 )}
                 </MenuItem>
                 {/* End Schools Dropdown */}
+              <MenuItem
+                icon={<Users size={20} />}
+                text="Students"
+                href="#"
+                active={location.pathname.startsWith("/allStudents")}
+                onClick={e => {
+                  e.preventDefault();
+                  setStudentsOpen?.(prev => !prev);
+                }}
+                isDropdown={true}
+                isOpen={studentsOpen}
+                >
+                {studentsOpen && (
+                  <div className="bg-[#003B87] pl-6">
 
               <MenuItem
                 icon={<Users size={20} />}
@@ -158,7 +175,8 @@ const Sidebar = () => {
                 href="/singleStudent"
                 active={location.pathname === "/singleStudent"}
                 onClick={closeSidebar}
-              />
+              /></div>)}
+              </MenuItem>
               
               <MenuItem
                 icon={<IdCard size={20} />}
@@ -210,16 +228,58 @@ const Sidebar = () => {
                 </div>
               )}
             </MenuItem>
-
+            <MenuItem
+              icon={<ClipboardList size={20} />}
+              text="Feedbacks"
+              href="/Feedbackview"
+              active={location.pathname === "/Feedbackview"}
+              onClick={closeSidebar}
+            />
+            <MenuItem
+                icon={<FileUp size={20} />}
+                text="Study Material"
+                href="#"
+                active={location.pathname.startsWith("/StudyMaterial")}
+                onClick={e => {
+                  e.preventDefault();
+                  setStudyMaterialOpen?.(prev => !prev);
+                }}
+                isDropdown={true}
+                isOpen={StudyMaterialOpen}
+                >
+                {StudyMaterialOpen && (
+                  <div className="bg-[#003B87] pl-6">
             <MenuItem
               icon={<FileUp size={20} />}
-              text="Study Material"
+              text="Upload Study Material"
               href="/StudyMaterial"
               active={location.pathname === "/StudyMaterial"}
               onClick={closeSidebar}
             />
+            <MenuItem
+              icon={<FileUp size={20} />}
+              text="View Study Material"
+              href="/Studymatview"
+              active={location.pathname === "/Studymatview"}
+              onClick={closeSidebar}
+            /></div>)}</MenuItem>
+
 
             {/* KG Students Section */}
+            <MenuItem
+                icon={<Users size={20} />}
+                text="KG Students"
+                href="#"
+                active={location.pathname.startsWith("/allkindargartenStudents")}
+                onClick={e => {
+                  e.preventDefault();
+                  setKGStudentsOpen?.(prev => !prev);
+                }}
+                isDropdown={true}
+                isOpen={KGStudentsOpen}
+                >
+                {KGStudentsOpen && (
+                  <div className="bg-[#003B87] pl-6">
             <MenuItem
               icon={<Users size={20} />}
               text="All KG Students"
@@ -240,7 +300,7 @@ const Sidebar = () => {
               href="/uploadKindergartenStudentData"
               active={location.pathname === "/uploadKindergartenStudentData"}
               onClick={closeSidebar}
-            />
+            /></div>)}</MenuItem>
           </nav>
         </div>
 

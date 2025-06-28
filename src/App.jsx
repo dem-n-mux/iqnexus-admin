@@ -19,6 +19,8 @@ import StudyMaterial from "./pages/StudyMaterial";
 import Amountwiselist from "./pages/Amountwiselist";
 import SectionPartList from "./pages/SectionPartList";
 import Classwiselist from "./pages/Classwiselist";
+import Studymatview from "./pages/Studymatview";
+import FeedbackView from "./pages/Feedbackview";
 
 const App = () => {
   return (
@@ -37,7 +39,9 @@ const App = () => {
             <Route path="/Cost-wise" element={<Amountwiselist />} />
             <Route path="/Section-wise" element={<SectionPartList />} />
             <Route path="/Class-wise" element={<Classwiselist />} />
+            <Route path="/Feedbackview" element={<FeedbackView />} />
             <Route path="/StudyMaterial" element={<StudyMaterial />} />
+            <Route path="/studymatview" element={ <Studymatview />} />
             <Route path="/allSchools" element={< AllSchools />} />
             <Route path="/allStudents" element={< AllStudents />} />
             <Route path="/genrate-admit-card" element={< AdmitCard />} />

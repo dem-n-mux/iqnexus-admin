@@ -41,10 +41,39 @@ const StudyMaterial = () => {
         }
     };
 
+    const [materialType, setMaterialType] = React.useState('file');
+    const [link, setLink] = React.useState('');
+
     return (
         <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded shadow">
             <h1 className="text-2xl font-bold mb-6 text-center">Study Material</h1>
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form
+                onSubmit={async (e) => {
+                    e.preventDefault();
+                    const data = new FormData();
+                    data.append('name', formData.name);
+                    data.append('class', formData.class);
+                    data.append('subject', formData.subject);
+                    data.append('fee', formData.fee);
+                    data.append('materialType', materialType);
+                    if (materialType === 'file' && formData.pdf) {
+                        data.append('file', formData.pdf);
+                    }
+                    if (materialType === 'link' && link) {
+                        data.append('link', link);
+                    }
+                    try {
+                        await fetch(`${BASE_URL}/addStudentStudyMaterial`, {
+                            method: 'POST',
+                            body: data,
+                        });
+                        alert('Study material uploaded successfully!');
+                    } catch (error) {
+                        alert('Failed to upload study material.');
+                    }
+                }}
+                className="space-y-5"
+            >
                 <div>
                     <label htmlFor="name" className="block mb-1 font-medium">Name:</label>
                     <input
@@ -107,17 +136,46 @@ const StudyMaterial = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="pdf" className="block mb-1 font-medium">Upload PDF:</label>
-                    <input
-                        type="file"
-                        id="pdf"
-                        name="pdf"
-                        accept="application/pdf"
-                        onChange={handleChange}
-                        required
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
+                    <label htmlFor="materialType" className="block mb-1 font-medium">Material Type</label>
+                    <select
+                        id="materialType"
+                        name="materialType"
+                        value={materialType}
+                        onChange={e => setMaterialType(e.target.value)}
+                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="file">File</option>
+                        <option value="link">Link</option>
+                    </select>
                 </div>
+                {materialType === 'file' ? (
+                    <div>
+                        <label htmlFor="pdf" className="block mb-1 font-medium">Upload File</label>
+                        <input
+                            type="file"
+                            id="pdf"
+                            name="pdf"
+                            accept="application/pdf"
+                            onChange={handleChange}
+                            required
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        />
+                    </div>
+                ) : (
+                    <div>
+                        <label htmlFor="link" className="block mb-1 font-medium">Upload Link</label>
+                        <input
+                            type="url"
+                            id="link"
+                            name="link"
+                            value={link}
+                            onChange={e => setLink(e.target.value)}
+                            required
+                            placeholder="https://example.com/material.pdf"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                )}
                 <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition"
