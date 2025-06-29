@@ -22,6 +22,7 @@ import Classwiselist from "./pages/Classwiselist";
 import Studymatview from "./pages/Studymatview";
 import FeedbackView from "./pages/Feedbackview";
 import AnswerKeyUpload from "./pages/AnswerKeyUpload";
+import QualifiedList from "./pages/Qualifiedlist";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="/uploadSchoolData" element={<UploadBulkSchoolData />} />
             <Route path="/singleStudent" element={<SingleStudentForm />} />
             <Route path="/singleSchool" element={<SingleSchoolForm />} />
+            <Route path="/QualifiedList" element={<QualifiedList />} />
             {/* <Route path="/updateStudent" element={< UpdateStudent />} /> */}
             <Route path="/School-wise" element={<SchoolPartList />} />
             <Route path="/Cost-wise" element={<Amountwiselist />} />

@@ -169,6 +169,7 @@ const Sidebar = () => {
                 active={location.pathname === "/uploadStudentData"}
                 onClick={closeSidebar}
               />
+              
               <MenuItem
                 icon={<UserPlus size={20} />}
                 text="Add Student"
@@ -183,6 +184,13 @@ const Sidebar = () => {
                 text="Admit Card"
                 href="/genrate-admit-card"
                 active={location.pathname === "/genrate-admit-card"}
+                onClick={closeSidebar}
+              />
+              <MenuItem
+                icon={<ClipboardList size={20} />}
+                text="Qualified List"
+                href="/QualifiedList"
+                active={location.pathname === "/QualifiedList"}
                 onClick={closeSidebar}
               />
 
