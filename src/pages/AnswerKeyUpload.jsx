@@ -88,121 +88,123 @@ const AnswerKeyUpload = () => {
 
     return (
         <div className="answer-key-upload">
-            <div className="flex w-full items-center justify-center mb-6">
-                <h2 className="font-bold text-2xl">
-                    {selectedExamLevel === "L2" ? "Advance Answer Key" : "Basic Answer Key"}
-                </h2>
-            </div>
-            <label className="block text-sm font-medium">Exam Level</label>
-            <Select
-                options={[
-                    { value: "L1", label: "Basic" },
-                    { value: "L2", label: "Advance" },
-                ]}
-                value={selectedExamLevel ? { value: selectedExamLevel, label: selectedExamLevel === "L1" ? "Basic" : "Advance" } : null}
-                onChange={(selected) => setSelectedExamLevel(selected?.value || "")}
-                className="basic-select w-90 mb-4"
-                classNamePrefix="select"
-                placeholder="Select Level"
-                styles={{
-                    control: (base) => ({
-                        ...base,
-                        padding: "0.1rem",
-                        fontSize: "0.875rem",
-                        borderColor: "black",
-                    }),
-                    menu: (base) => ({
-                        ...base,
-                        zIndex: 50,
-                    }),
-                }}
-            />
-            <label className="block text-sm font-medium mt-6 mb-2">Select Exam</label>
-            <Select
-                options={exams
-                    .filter((exam) => exam.level === selectedExamLevel)
-                    .map((exam) => ({
-                        value: exam.name,
-                        label: exam.name,
+            <div className="shadow-lg rounded-lg p-6 bg-white">
+                <div className="flex w-full items-center justify-center mb-6">
+                    <h2 className="font-bold text-2xl text-gray-800">
+                        {selectedExamLevel === "L2" ? "Advance Answer Key" : "Basic Answer Key"}
+                    </h2>
+                </div>
+                <label className="block text-sm font-medium text-gray-700">Exam Level</label>
+                <Select
+                    options={[
+                        { value: "L1", label: "Basic" },
+                        { value: "L2", label: "Advance" },
+                    ]}
+                    value={selectedExamLevel ? { value: selectedExamLevel, label: selectedExamLevel === "L1" ? "Basic" : "Advance" } : null}
+                    onChange={(selected) => setSelectedExamLevel(selected?.value || "")}
+                    className="basic-select w-90 mb-4"
+                    classNamePrefix="select"
+                    placeholder="Select Level"
+                    styles={{
+                        control: (base) => ({
+                            ...base,
+                            padding: "0.1rem",
+                            fontSize: "0.875rem",
+                            borderColor: "black",
+                        }),
+                        menu: (base) => ({
+                            ...base,
+                            zIndex: 50,
+                        }),
+                    }}
+                />
+                <label className="block text-sm font-medium text-gray-700 mt-6 mb-2">Select Exam</label>
+                <Select
+                    options={exams
+                        .filter((exam) => exam.level === selectedExamLevel)
+                        .map((exam) => ({
+                            value: exam.name,
+                            label: exam.name,
+                        }))}
+                    value={selectedExam}
+                    onChange={(selected) => setSelectedExam(selected)}
+                    className="basic-select w-90 mb-4"
+                    classNamePrefix="select"
+                    placeholder="Select exam..."
+                    styles={{
+                        control: (base) => ({
+                            ...base,
+                            padding: "0.1rem",
+                            fontSize: "0.875rem",
+                            borderColor: "black",
+                        }),
+                        menu: (base) => ({
+                            ...base,
+                            zIndex: 50,
+                        }),
+                    }}
+                />
+                <label className="block text-sm font-medium text-gray-700 mt-7">Class</label>
+                <Select
+                    options={[...Array(12)].map((_, i) => ({
+                        value: (i + 1).toString(),
+                        label: `Class ${i + 1}`,
                     }))}
-                value={selectedExam}
-                onChange={(selected) => setSelectedExam(selected)}
-                className="basic-select w-90 mb-4"
-                classNamePrefix="select"
-                placeholder="Select exam..."
-                styles={{
-                    control: (base) => ({
-                        ...base,
-                        padding: "0.1rem",
-                        fontSize: "0.875rem",
-                        borderColor: "black",
-                    }),
-                    menu: (base) => ({
-                        ...base,
-                        zIndex: 50,
-                    }),
-                }}
-            />
-            <label className="block text-sm font-medium mt-7">Class</label>
-            <Select
-                options={[...Array(12)].map((_, i) => ({
-                    value: (i + 1).toString(),
-                    label: `Class ${i + 1}`,
-                }))}
-                value={selectedClass ? { value: selectedClass, label: `Class ${selectedClass}` } : null}
-                onChange={(selected) => setSelectedClass(selected?.value || "")}
-                className="basic-select w-90 mb-4"
-                classNamePrefix="select"
-                placeholder="Select Class"
-                styles={{
-                    control: (base) => ({
-                        ...base,
-                        padding: "0.1rem",
-                        fontSize: "0.875rem",
-                        borderColor: "black",
-                    }),
-                    menu: (base) => ({
-                        ...base,
-                        zIndex: 50,
-                    }),
-                }}
-            />
-            <div className="upload-section mt-6">
-                <h3 className='font-semibold mb-3 text-xl'>Questions</h3>
-                {[...Array(questionsCount)].map((_, index) => (
-                    <div key={index} className="question-item mb-4 p-4 border rounded">
-                        <label className="block text-sm font-medium mb-2">
-                            Question {index + 1}
-                        </label>
-                        <div className="flex gap-4">
-                            {['A', 'B', 'C', 'D'].map((option) => (
-                                <label key={option} className="flex items-center">
-                                    <input
-                                        type="radio"
-                                        name={`question-${index}`}
-                                        value={option}
-                                        className="mr-1"
-                                        checked={answers[index] === option}
-                                        onChange={(e) => handleAnswerChange(index, e.target.value)}
-                                    />
-                                    {option}
-                                </label>
-                            ))}
+                    value={selectedClass ? { value: selectedClass, label: `Class ${selectedClass}` } : null}
+                    onChange={(selected) => setSelectedClass(selected?.value || "")}
+                    className="basic-select w-90 mb-4"
+                    classNamePrefix="select"
+                    placeholder="Select Class"
+                    styles={{
+                        control: (base) => ({
+                            ...base,
+                            padding: "0.1rem",
+                            fontSize: "0.875rem",
+                            borderColor: "black",
+                        }),
+                        menu: (base) => ({
+                            ...base,
+                            zIndex: 50,
+                        }),
+                    }}
+                />
+                <div className="upload-section mt-6">
+                    <h3 className='font-semibold mb-3 text-xl text-gray-800'>Questions</h3>
+                    {[...Array(questionsCount)].map((_, index) => (
+                        <div key={index} className="question-item mb-4 p-4 border rounded bg-gray-100">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Question {index + 1}
+                            </label>
+                            <div className="flex gap-4">
+                                {['A', 'B', 'C', 'D'].map((option) => (
+                                    <label key={option} className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name={`question-${index}`}
+                                            value={option}
+                                            className="mr-1"
+                                            checked={answers[index] === option}
+                                            onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
-                <button
-                    onClick={addMoreQuestions}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                    Add More Questions
-                </button>
-                <button
-                    onClick={handleSaveAnswers}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4 ml-5"
-                >
-                    Save Answers
-                </button>
+                    ))}
+                    <button
+                        onClick={addMoreQuestions}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Add More Questions
+                    </button>
+                    <button
+                        onClick={handleSaveAnswers}
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4 ml-5"
+                    >
+                        Save Answers
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -22,6 +22,8 @@ import Classwiselist from "./pages/Classwiselist";
 import Studymatview from "./pages/Studymatview";
 import FeedbackView from "./pages/Feedbackview";
 import AnswerKeyUpload from "./pages/AnswerKeyUpload";
+import TeachersData from "./pages/TeachersData";
+
 
 const App = () => {
   return (
@@ -32,6 +34,7 @@ const App = () => {
           <Route element={<Sidebar />}>
             <Route path="/" element={<Home />} />
             <Route path="/answer-key-upload" element={<AnswerKeyUpload />} />
+            <Route path="/teachers-data" element={<TeachersData />} />
             <Route path="/uploadStudentData" element={<UploadBulkStudentData />} />
             <Route path="/uploadSchoolData" element={<UploadBulkSchoolData />} />
             <Route path="/singleStudent" element={<SingleStudentForm />} />
