@@ -65,6 +65,7 @@ const FeedbackView = () => {
               <th className="px-4 py-3 text-center border border-gray-300 font-semibold">ROLL NUMBER</th>
               <th className="px-4 py-3 text-center border border-gray-300 font-semibold">MOB NUMBER</th>
               <th className="px-4 py-3 text-center border border-gray-300 font-semibold">MSG BOX</th>
+              <th className="px-4 py-3 text-center border border-gray-300 font-semibold">WHATSAPP</th>
               <th className="px-4 py-3 text-center border border-gray-300 font-semibold">RESOLVE</th>
             </tr>
           </thead>
@@ -94,6 +95,21 @@ const FeedbackView = () => {
                     </td>
                     <td className="px-4 py-3 text-center border border-gray-300">
                       <span className="text-gray-600">{item.message || item.msgBox || "N/A"}</span>
+                    </td>
+                    <td className="px-4 py-3 text-center border border-gray-300">
+                      {item.mobileNo ? (
+                        <a
+                          href={`https://wa.me/91${item.mobileNo}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-green-600 underline hover:text-green-800"
+                          title="Chat on WhatsApp"
+                        >
+                          WhatsApp
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">N/A</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center border border-gray-300">
                       <button
