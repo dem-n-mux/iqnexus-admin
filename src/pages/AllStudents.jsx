@@ -1448,7 +1448,7 @@ fetchStudents(1, searchData);
                   </div>
                   <div>
                     <p>
-                      <strong>Exam Incharge:</strong> {school.incharge || "N/A"}
+                      <strong>Exam Incharge:</strong> {school.examInchargeName || "N/A"}
                     </p>
                     <p>
                       <strong>Print Date:</strong>{" "}

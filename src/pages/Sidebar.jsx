@@ -316,6 +316,15 @@ const Sidebar = () => {
               active={location.pathname === "/answer-key-upload"}
               onClick={closeSidebar}
             />
+       
+            <MenuItem
+              icon={<Users size={20} />}  
+              text="Teachers Data"
+              href="/teachers-data"
+              active={location.pathname === "/teachers-data"}
+              onClick={closeSidebar}
+            />
+            
           </nav>
         </div>
 
