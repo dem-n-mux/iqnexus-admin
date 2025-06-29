@@ -301,6 +301,13 @@ const Sidebar = () => {
               active={location.pathname === "/uploadKindergartenStudentData"}
               onClick={closeSidebar}
             /></div>)}</MenuItem>
+            <MenuItem
+              icon={<FileUp size={20} />}
+              text="Upload Answer Key"
+              href="/answer-key-upload"
+              active={location.pathname === "/answer-key-upload"}
+              onClick={closeSidebar}
+            />
           </nav>
         </div>
 
