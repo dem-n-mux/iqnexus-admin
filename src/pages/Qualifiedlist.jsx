@@ -194,15 +194,15 @@ const QualifiedList = () => {
   const attendanceRef = useRef(null);
   console.log("selected exam", selectedExam);
   const exams = [
-    { name: "IQEOL1", level: "L1" },
-    { name: "IQEOL2", level: "L2" },
-    { name: "IQROL1", level: "L1" },
-    { name: "IQROL2", level: "L2" },
-    { name: "IQSOL1", level: "L1" },
-    { name: "IQSOL2", level: "L2" },
-    { name: "IQMOL1", level: "L1" },
-    { name: "IQMOL2", level: "L2" },
-    { name: "IQGKOL1", level: "L1" },
+    { name: "IQEOL1", level: "L1",value:'IENGOL1' },
+    { name: "IQEOL2", level: "L2",value:'IENGOL2' },
+    { name: "IQROL1", level: "L1", value:'IAOL1' },
+    { name: "IQROL2", level: "L2", value:'IAOL2' },
+    { name: "IQSOL1", level: "L1", value:'ITSTL1' },
+    { name: "IQSOL2", level: "L2", value:'ITSTL2' },
+    { name: "IQMOL1", level: "L1"  , value:'IMOL1' },
+    { name: "IQMOL2", level: "L2", value:'IMOL2' },
+    { name: "IQGKOL1", level: "L1", value:'IGKOL1' },
     // { name: "IQGKOL2", level: "L2" },
   ];
 
@@ -254,17 +254,17 @@ const QualifiedList = () => {
     try {
       setIsFetching(true);
       const res = await axios.get(
-        `${BASE_URL}/fetchBLQList`,
+        `${BASE_URL}/fetchBLQList?examLevel=${selectedExamLevel}&schoolCode=${selectedSchoolCode}&subject=${encodeURIComponent(JSON.stringify( selectedExam))}  `,
       );
-      console.log("Fetched students:", res.data.student);
-      if (res.data.student) {
-        setStudentsData(res.data.student);
+      console.log("Fetched students:", res.data);
+      if (res.data.studentData) {
+        setStudentsData(res.data.studentData);
         setSchool(res.data.school || {});
         setIsFetched(true);
       } else {
         setStudentsData([]);
         setIsFetched(true);
-        alert("Error fetching student data.");
+        // alert("Error fetching student data.");
       }
     } catch (error) {
       console.error("Error fetching student data:", error);
@@ -750,9 +750,9 @@ const QualifiedList = () => {
     <div className="min-h-screen p-6 bg-gray-50 flex items-center justify-end">
       {/* Participationlist */}
       <div>
-        <div className="fixed inset-0 flex items-center justify-end mr-[130px]">
+        <div className="fixed inset-0 flex  justify-end mr-[130px]">
           <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-[80%] max-h-[95vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Basic Participation List</h2>
+            <h2 className="text-3xl font-bold mb-6">Basic Participation List</h2>
 
             {/* Filters Form */}
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -775,7 +775,7 @@ const QualifiedList = () => {
                         options={exams
                             .filter((exam) => exam.level === selectedExamLevel)
                             .map((exam) => ({
-                                value: exam.name,
+                                value: exam.value,
                                 label: exam.name,
                             }))}
                         value={selectedExam}
