@@ -116,11 +116,18 @@ const StudyMaterial = () => {
                         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">Select Subject</option>
-                        <option value="IAOL1Book">IQRO</option>
-                        <option value="ITSTL1Book">IQSO</option>
-                        <option value="IMOL1Book">IQMO</option>
-                        <option value="IGKOL1Book">IQGKO</option>
-                        <option value="IENGOL1Book">IQEO</option>
+                        <option value="IAOL1">IQROL1</option>
+                        <option value="ITSTL1">IQSOL1</option>
+                        <option value="IMOL1">IQMOL1</option>
+                        <option value="IGKOL1">IQGKOL1</option>
+                        <option value="IENGOL1">IQEOL1</option>
+                        <option value="IAOL2">IQROL2</option>
+                        <option value="ITSTL2">IQSOL2</option>
+                        <option value="IMOL2">IQMOL2</option>
+                                <option value="IENGOL2">IQEOL2</option>
+
+
+                     
                     </select>
                 </div>
                 <div>
