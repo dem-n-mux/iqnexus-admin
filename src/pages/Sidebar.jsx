@@ -193,6 +193,13 @@ const Sidebar = () => {
                 active={location.pathname === "/QualifiedList"}
                 onClick={closeSidebar}
               />
+              <MenuItem
+                icon={<FileUp size={20} />}
+                text="Upload Results"
+                href="/uploadresults"
+                active={location.pathname === "/uploadresults"}
+                onClick={closeSidebar}
+              />
 
               {/* Participation List Dropdown */}
             <MenuItem

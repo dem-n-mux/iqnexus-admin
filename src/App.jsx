@@ -24,6 +24,7 @@ import FeedbackView from "./pages/Feedbackview";
 import AnswerKeyUpload from "./pages/AnswerKeyUpload";
 import QualifiedList from "./pages/Qualifiedlist";
 import TeachersData from "./pages/TeachersData";
+import Uploadresults from "./pages/uploadResults";
 
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/Section-wise" element={<SectionPartList />} />
             <Route path="/Class-wise" element={<Classwiselist />} />
             <Route path="/Feedbackview" element={<FeedbackView />} />
+            <Route path="/UploadResults" element={<Uploadresults />} />
             <Route path="/StudyMaterial" element={<StudyMaterial />} />
             <Route path="/studymatview" element={ <Studymatview />} />
             <Route path="/allSchools" element={< AllSchools />} />
