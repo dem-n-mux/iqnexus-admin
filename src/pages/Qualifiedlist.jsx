@@ -221,7 +221,11 @@ const QualifiedList = () => {
   console.log("Exam List Plain Array:", examListPlainArray);
   // Fetch the student data based on filters
   const handleFetchStudents = async () => {
-    if (selectedExamLevel || selectedExam.length>0 || selectedSchoolCode || selectedClasses.length > 0 || selectedSections.length > 0) {
+    // Require both exam level and school code to be selected
+    if (!selectedExamLevel || !selectedSchoolCode) {
+      alert("Please select both Exam Level and School Code!");
+      return;
+    }
 
     let selectedExamNew = [];
     if (selectedExamLevel === "L1" && !selectedExam) {
@@ -236,7 +240,7 @@ const QualifiedList = () => {
     const filters = {
       examLevel: selectedExamLevel,
       exam: selectedExam || undefined,
-      schoolCode: selectedSchoolCode || undefined,
+      schoolCode: selectedSchoolCode,
       classes:
         selectedClasses.length > 0
           ? selectedClasses.map((opt) => opt.value)
@@ -246,7 +250,6 @@ const QualifiedList = () => {
           ? selectedSections.map((opt) => opt.value)
           : undefined,
     };
-  
 
     try {
       setIsFetching(true);
@@ -271,12 +274,6 @@ const QualifiedList = () => {
     } finally {
       setIsFetching(false);
     }
-  }
-    else  {
-          alert("Please select atleast one filter!");
-      return;
-    
-  }
   };
 
   const handleDownloadPDF = async () => {
