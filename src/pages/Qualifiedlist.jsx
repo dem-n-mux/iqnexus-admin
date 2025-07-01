@@ -920,7 +920,7 @@ const QualifiedList = () => {
                     <th className="border px-2 py-1">Mother</th>
                     <th className="border px-2 py-1">Class</th>
                     <th className="border px-2 py-1">Sec</th>
-                    <th className="border px-2 py-1">Subjects Passed</th>
+                    <th className="border px-2 py-1">Subject</th>
                     <th className="border px-2 py-1">Participation</th>
                   </tr>
                 </thead>
@@ -943,18 +943,28 @@ const QualifiedList = () => {
                         <td className="border px-2 py-1">{student.section}</td>
                         {/* Subjects Passed */}
                         <td className="border px-2 py-1">
-                          {
+                          {/* {
                             getQualifiedSubjects(
                               student,
                               selectedExamLevel,
                               selectedExam,
                               examListPlainArray
                             )
+                          } */}
+                          {}
+
+                          {
+                              
+
                           }
                         </td>
                         {/* Participation */}
             <td className="border px-2 py-1">
-                {
+              {
+
+              }
+              
+                {/* {
                     // Show "Yes" if student participated in any selected exam, else "No"
                     (() => {
                         // Map exam code to student field
@@ -988,7 +998,7 @@ const QualifiedList = () => {
                         );
                         return participated ? "Yes" : "No";
                     })()
-                }
+                } */}
             </td>
           </tr>
                     ))
