@@ -25,6 +25,7 @@ import AnswerKeyUpload from "./pages/AnswerKeyUpload";
 import QualifiedList from "./pages/Qualifiedlist";
 import TeachersData from "./pages/TeachersData";
 import Uploadresults from "./pages/uploadResults";
+import UpdateAdvanceList from "./pages/updateAdvanceList";
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
           <Route element={<Sidebar />}>
             <Route path="/" element={<Home />} />
             <Route path="/answer-key-upload" element={<AnswerKeyUpload />} />
+            <Route path="/updateAdvanceList" element={<UpdateAdvanceList />} />
             <Route path="/teachers-data" element={<TeachersData />} />
             <Route path="/uploadStudentData" element={<UploadBulkStudentData />} />
             <Route path="/uploadSchoolData" element={<UploadBulkSchoolData />} />

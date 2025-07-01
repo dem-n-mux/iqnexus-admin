@@ -240,6 +240,7 @@ const Sidebar = () => {
                     active={location.pathname === "/Cost-wise"}
                     onClick={closeSidebar}
                   />
+
                 </div>
               )}
             </MenuItem>
@@ -329,6 +330,13 @@ const Sidebar = () => {
               text="Teachers Data"
               href="/teachers-data"
               active={location.pathname === "/teachers-data"}
+              onClick={closeSidebar}
+            />
+            <MenuItem
+              icon={<FileUp size={20} />}
+              text="Update Advance List"
+              href="/updateAdvanceList"
+              active={location.pathname === "/updateAdvanceList"}
               onClick={closeSidebar}
             />
             
